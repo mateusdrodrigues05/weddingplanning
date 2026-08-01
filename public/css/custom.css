@@ -745,6 +745,100 @@ svg {
     justify-content: center;
 }
 
+/*==== Modal Delete Guest ====*/
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+.modal-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    width: 320px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+}
+.btn-cancel {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    background: #f3f4f6;
+    cursor: pointer;
+}
+.btn-confirm {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    background: #ef4444;
+    color: #fff;
+    cursor: pointer;
+}
+
+/*=== filtes ===*/
+.filter-btn {
+    display: none; /* só aparece no mobile */
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.filter-panel {
+    display: flex; /* no desktop fica sempre visível, lado a lado */
+    align-items: center;
+    gap: 12px;
+}
+
+@media (max-width: 768px) {
+    .toolbar {
+        position: relative;
+    }
+
+    .filter-btn {
+        display: flex;
+    }
+
+    .filter-panel {
+        display: none; /* escondido por padrão no mobile */
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        padding: 16px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        z-index: 40;
+        min-width: 220px;
+    }
+
+    .filter-panel.active {
+        display: flex;
+    }
+
+    .chips {
+        flex-wrap: wrap;
+    }
+}
+
 @media (max-width: 720px) {
     .sidebar {
         display: none;
@@ -764,5 +858,22 @@ svg {
 
     .row-meta {
         display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .view-toggle {
+        display: none;
+    }
+
+    .btn-primary .btn-text {
+        display: none;
+    }
+
+    .btn-primary {
+        padding: 10px; /* fica quadrado/redondo só com o ícone */
+        width: 40px;
+        height: 40px;
+        justify-content: center;
     }
 }

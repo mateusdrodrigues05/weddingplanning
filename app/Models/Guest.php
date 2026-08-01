@@ -17,7 +17,8 @@ class Guest extends Model
         'phone',
         'rsvp_token',
         'rsvp_status',
-        'companions_count',
+        'companions_adult',
+        'companions_children',
         'dietary_restrictions',
         'notes',
     ];

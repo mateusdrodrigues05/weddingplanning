@@ -15,6 +15,10 @@
     <!-- CSS compilado (Tailwind via Vite) -->
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- Ou, se não usares Vite e tiveres o CSS diretamente em public/css -->
     {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
 </head>
@@ -29,16 +33,16 @@
                     <circle cx="9" cy="14" r="6" />
                     <circle cx="15" cy="14" r="6" />
                 </svg>
-                <div class="brand">Mariana &amp; Tiago</div>
+                <div class="brand">Margarida &amp; David</div>
             </div>
-            <div class="brand-sub">12 Setembro 2026</div>
+            <div class="brand-sub">8 Maio 2027</div>
 
-            <div class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            {{-- <div class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 11l9-8 9 8" />
                     <path d="M5 10v10h14V10" />
                     <path d="M9 20v-6h6v6" />
-                </svg>Início</div>
+                </svg>Início</div> --}}
             <div class="nav-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="9" cy="8" r="3" />
@@ -46,7 +50,7 @@
                     <circle cx="17" cy="9" r="2.5" />
                     <path d="M23 20c0-2.6-2-4.8-4.7-5.6" />
                 </svg>Convidados</div>
-            <div class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            {{-- <div class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 8h18M5 8v10M19 8v10M3 8l2-4h14l2 4" />
                 </svg>Mesas</div>
@@ -61,7 +65,7 @@
                     <circle cx="12" cy="12" r="3" />
                     <path
                         d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z" />
-                </svg>Definições</div>
+                </svg>Definições</div> --}}
         </div>
 
         <!-- Conteúdo principal -->
@@ -70,11 +74,6 @@
             <main class="main">
                 @yield('content')
             </main>
-
-            <!-- Footer -->
-            <footer class="border-t border-stone-200 py-4 px-8 text-center text-sm text-stone-400">
-                Feito com carinho para o vosso grande dia.
-            </footer>
 
         </div>
     </div>

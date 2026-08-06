@@ -157,13 +157,15 @@
                 <div class="card-footer">
                     <div class="status-text confirmed">{{ $guest->rsvp_status }}</div>
                     <div class="card-actions">
-                        <div class="icon-btn" title="Copiar link"><svg viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M10 13a5 5 0 007.5.5l2-2a5 5 0 00-7-7l-1 1" />
-                                <path d="M14 11a5 5 0 00-7.5-.5l-2 2a5 5 0 007 7l1-1" />
-                            </svg></div>
+                        <a href="{{ route('guest.show', $guest->id) }}" class="icon-btn" title="Editar">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </a>
+                        <div class="icon-btn" title="Copiar link">
+                            <i class="fa-solid fa-link"></i>
+                        </div>
                         <button class="icon-btn" title="Remover"
-                            onclick="openDeleteModal({{ $guest->id }}, '{{ $guest->name }}')">✕</button>
+                            onclick="openDeleteModal({{ $guest->id }}, '{{ $guest->name }}')"><i class="fa-solid fa-xmark"></i></button>
+                        
                     </div>
                 </div>
             </div>

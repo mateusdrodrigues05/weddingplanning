@@ -19,6 +19,17 @@ class GuestController extends Controller
         ]);
     }
 
+    public function show(Request $request, $id){
+        $guest = Guest::findOrFail($id);
+
+        $companions = $guest->companions_adult + $guest->companions_children;
+
+        return view('guest.show', [
+            'guest' => $guest,
+            'companions' => $companions
+        ]);
+    }
+
     public function store(Request $request)
     {   
         $request->validate([

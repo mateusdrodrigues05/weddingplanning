@@ -364,7 +364,6 @@ svg {
     border-radius: 18px;
     padding: 20px 18px 16px;
     transition: transform .18s ease, box-shadow .18s ease;
-    opacity: 0;
 }
 
 .guest-card.card-enter {
@@ -749,25 +748,28 @@ svg {
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 50;
 }
+
 .modal-box {
     background: #fff;
     border-radius: 12px;
     padding: 24px;
     width: 320px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
+
 .modal-actions {
     display: flex;
     justify-content: flex-end;
     gap: 8px;
     margin-top: 16px;
 }
+
 .btn-cancel {
     padding: 8px 16px;
     border-radius: 8px;
@@ -775,6 +777,7 @@ svg {
     background: #f3f4f6;
     cursor: pointer;
 }
+
 .btn-confirm {
     padding: 8px 16px;
     border-radius: 8px;
@@ -786,7 +789,8 @@ svg {
 
 /*=== filtes ===*/
 .filter-btn {
-    display: none; /* só aparece no mobile */
+    display: none;
+    /* só aparece no mobile */
     width: 40px;
     height: 40px;
     border-radius: 8px;
@@ -799,81 +803,286 @@ svg {
 }
 
 .filter-panel {
-    display: flex; /* no desktop fica sempre visível, lado a lado */
+    display: flex;
     align-items: center;
     gap: 12px;
 }
 
-@media (max-width: 768px) {
-    .toolbar {
-        position: relative;
-    }
+.icon-btn i,
+.icon-btn .fa-regular,
+.icon-btn .fa-solid {
+    font-size: 14px; /* reduce from whatever it currently is — try 12px, 14px, or 16px */
+}
 
-    .filter-btn {
-        display: flex;
-    }
+.icon-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+}
 
-    .filter-panel {
-        display: none; /* escondido por padrão no mobile */
-        position: absolute;
-        top: calc(100% + 8px);
-        right: 0;
-        background: #fff;
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-        padding: 16px;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-        z-index: 40;
-        min-width: 220px;
-    }
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    align-items: stretch; /* default, but explicit here */
+}
 
-    .filter-panel.active {
-        display: flex;
-    }
+.guest-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
 
-    .chips {
-        flex-wrap: wrap;
+.card-actions {
+    margin-top: auto; /* keeps the bottom row (confirmed/pending + icons) aligned across all cards */
+}
+
+/*====== show guests ======*/
+/* ============================
+   Voltar / breadcrumb
+============================ */
+.back-link {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  color: #8C7A6B;
+  transition: color 0.2s ease;
+}
+ 
+.back-link:hover {
+  color: #4A5D42;
+}
+/* ============================
+   Card principal
+============================ */
+.guest-card {
+    background-color: #FFFFFF;
+    border: 1px solid #E8E2D6;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* ============================
+   Cabeçalho
+============================ */
+.guest-card__header {
+    padding: 2rem 2.5rem;
+}
+
+.guest-card__name {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 2.25rem;
+    color: #3A3532;
+    letter-spacing: 0.02em;
+}
+
+.badge {
+    display: inline-block;
+    margin-top: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.badge--confirmed {
+    background-color: #DCE8D3;
+    color: #3E5233;
+}
+
+.badge--pending {
+    background-color: #F3E4C7;
+    color: #8A6A2C;
+}
+
+.badge--declined {
+    background-color: #F0D9D3;
+    color: #8A3E2C;
+}
+
+.badge--crianca {
+    background-color: #F3E4C7;
+    color: #8A6A2C;
+}
+
+.badge--adulto {
+    background-color: #E8E2D6;
+    color: #8C7A6B;
+}
+
+/* ============================
+   Corpo / info
+============================ */
+.guest-card__body {
+    padding: 2rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+    .info-grid {
+        grid-template-columns: 1fr 1fr;
     }
 }
 
-@media (max-width: 720px) {
-    .sidebar {
-        display: none;
-    }
-
-    .main {
-        padding: 20px 16px;
-    }
-
-    .stats-row {
-        flex-wrap: wrap;
-    }
-
-    .stat-pill {
-        min-width: calc(50% - 6px);
-    }
-
-    .row-meta {
-        display: none;
-    }
+.info-item__label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #8C7A6B;
 }
 
-@media (max-width: 768px) {
-    .view-toggle {
-        display: none;
-    }
-
-    .btn-primary .btn-text {
-        display: none;
-    }
-
-    .btn-primary {
-        padding: 10px; /* fica quadrado/redondo só com o ícone */
-        width: 40px;
-        height: 40px;
-        justify-content: center;
-    }
+.info-item__value {
+    margin-top: 0.25rem;
+    font-size: 1rem;
+    color: #3A3532;
 }
+
+/* ============================
+   Secção acompanhantes
+============================ */
+.section-divider {
+    border-top: 1px solid #E8E2D6;
+    padding-top: 1.5rem;
+}
+
+.section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 1.375rem;
+    color: #4A5D42;
+    margin-bottom: 1rem;
+}
+
+.empty-state {
+    font-size: 0.875rem;
+    font-style: italic;
+    color: #8C7A6B;
+}
+
+.companion-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.companion-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #F7F5F0;
+    border: 1px solid #E8E2D6;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+}
+
+.companion-item__left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.companion-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: #DCE8D3;
+    color: #3E5233;
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.companion-item__name {
+    font-size: 1rem;
+    color: #3A3532;
+}
+
+/* ============================
+   Rodapé / ações
+============================ */
+.guest-card__footer {
+    padding: 1.25rem 2.5rem;
+    background-color: #FAF8F4;
+    border-top: 1px solid #E8E2D6;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.btn--outline-green {
+    border-color: #4A5D42;
+    background-color: #4A5D42;
+    color: white;
+}
+
+.btn--outline-green:hover {
+    background-color: #394733;
+    color: #FFFFFF;
+}
+
+.btn--outline-clay {
+    border-color: #B7704F;
+    background-color: #B7704F;
+    color: white;
+}
+
+.btn--outline-clay:hover {
+    background-color: #9c5f43;
+    color: #FFFFFF;
+}
+
+
+
+    @media (max-width: 720px) {
+        .sidebar {
+            display: none;
+        }
+
+        .main {
+            padding: 20px 16px;
+        }
+
+        .stats-row {
+            flex-wrap: wrap;
+        }
+
+        .stat-pill {
+            min-width: calc(50% - 6px);
+        }
+
+        .row-meta {
+            display: none;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .view-toggle {
+            display: none;
+        }
+
+        .btn-primary .btn-text {
+            display: none;
+        }
+
+        .btn-primary {
+            padding: 10px;
+            /* fica quadrado/redondo só com o ícone */
+            width: 40px;
+            height: 40px;
+            justify-content: center;
+        }
+    }

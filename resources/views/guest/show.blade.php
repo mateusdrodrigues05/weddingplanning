@@ -338,7 +338,7 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        location.reload(); // refreshes the page, guest list updates
+                        window.location.href = "{{ route('guests') }}";
                     } else {
                         alert('Erro ao eliminar convidado.');
                     }

@@ -8,6 +8,16 @@
 
 @section('content')
 
+    @if ($errors->any())
+        <div class="bg-red-50 text-red-700 p-3 rounded mb-4">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="page-header">
         <div>
             <div class="eyebrow">Gestão</div>
@@ -164,8 +174,9 @@
                             <i class="fa-solid fa-link"></i>
                         </div>
                         <button class="icon-btn" title="Remover"
-                            onclick="openDeleteModal({{ $guest->id }}, '{{ $guest->name }}')"><i class="fa-solid fa-xmark"></i></button>
-                        
+                            onclick="openDeleteModal({{ $guest->id }}, '{{ $guest->name }}')"><i
+                                class="fa-solid fa-xmark"></i></button>
+
                     </div>
                 </div>
             </div>
@@ -329,11 +340,10 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        document.getElementById('guest-' + guestIdToDelete)?.remove();
+                        location.reload(); // refreshes the page, guest list updates
                     } else {
                         alert('Erro ao eliminar convidado.');
                     }
-                    closeDeleteModal();
                 });
         }
 
@@ -349,6 +359,12 @@
             if (!panel.contains(e.target) && !btn.contains(e.target)) {
                 panel.classList.remove('active');
             }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('success'))
+                Livewire.dispatch('guest-created');
+            @endif
         });
     </script>
 @endsection

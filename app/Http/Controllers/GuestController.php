@@ -11,7 +11,12 @@ class GuestController extends Controller
     
     public function index()
     {
-        $guests = Guest::all();
+        $guests = Guest::with('companions')->get()  ;
+
+        $guests->each(function ($guest) {
+            $guest->companions_adult = $guest->companions->where('age', '>=', 18)->count();
+            $guest->companions_children = $guest->companions->where('age', '<', 18)->count();
+        });
 
         return view('guest.index',
         [
@@ -22,11 +27,14 @@ class GuestController extends Controller
     public function show(Request $request, $id){
         $guest = Guest::findOrFail($id);
 
-        $companions = $guest->companions_adult + $guest->companions_children;
+        $companions = $guest->companions;
+        $companionsCount = $companions->count();
+        
 
         return view('guest.show', [
             'guest' => $guest,
-            'companions' => $companions
+            'companionsCount' => $companionsCount,
+            'companions' => $companions,
         ]);
     }
 
@@ -34,11 +42,11 @@ class GuestController extends Controller
     {   
         $request->validate([
             'name' => 'required|string|max:225',
-            'email' => 'required|string|max:225',
             'phone' => 'required|integer',
         ]);
 
-        $guestSave = Guest::create([
+
+        Guest::create([
             'wedding_id' => 1,
             'name' => $request->name,
             'email' => $request->email,

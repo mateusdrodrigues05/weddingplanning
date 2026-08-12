@@ -62,10 +62,10 @@
             @endif
             
 
-            @if(!empty($companions))
+            @if($companionsCount > 0)
                 <div class="info-item">
                     <dt class="info-item__label">Total de pessoas</dt>
-                    <dd class="info-item__value" data-field="total-pessoas">{{ $companions }}</dd>
+                    <dd class="info-item__value" data-field="total-pessoas">{{ $companionsCount }}</dd>
                 </div>
             @else
                 <div class="info-item">
@@ -95,7 +95,21 @@
 
                 <ul class="companion-list" data-field="acompanhantes-lista">
 
-                    <!-- Item: adulto -->
+                    @foreach ($companions as $companion)
+                        <!-- Item: adulto -->
+                        <li class="companion-item">
+                            <div class="companion-item__left">
+                                <span class="companion-avatar">{{ Str::of($companion->name)->explode(' ')->map(fn($word) => Str::substr($word, 0, 1))->join('') }}</span>
+                                <span class="companion-item__name">{{ $companion->name }}</span>
+                            </div>
+                            @if ($companion->age >= 18)   
+                                <span class="badge badge--adulto">Adulto</span>
+                            @else
+                                <span class="badge badge--crianca">Criança</span>
+                            @endif
+                        </li>
+                    @endforeach
+                    {{-- <!-- Item: adulto -->
                     <li class="companion-item">
                         <div class="companion-item__left">
                             <span class="companion-avatar">A</span>
@@ -111,7 +125,7 @@
                             <span class="companion-item__name">Tomás Pereira</span>
                         </div>
                         <span class="badge badge--crianca">Criança · 6 anos</span>
-                    </li>
+                    </li> --}}
 
                 </ul>
             </div>

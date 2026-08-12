@@ -11,16 +11,10 @@ class Guest extends Model
 
     protected $fillable = [
         'wedding_id',
-        'table_id',
         'name',
         'email',
         'phone',
-        'rsvp_token',
         'rsvp_status',
-        'companions_adult',
-        'companions_children',
-        'dietary_restrictions',
-        'notes',
     ];
 
     protected $casts = [
@@ -35,5 +29,10 @@ class Guest extends Model
     public function table()
     {
         return $this->belongsTo(Table::class);
+    }
+
+    public function companions()
+    {
+        return $this->hasMany(Companion::class);
     }
 }

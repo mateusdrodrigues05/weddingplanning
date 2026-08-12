@@ -811,7 +811,8 @@ svg {
 .icon-btn i,
 .icon-btn .fa-regular,
 .icon-btn .fa-solid {
-    font-size: 14px; /* reduce from whatever it currently is — try 12px, 14px, or 16px */
+    font-size: 14px;
+    /* reduce from whatever it currently is — try 12px, 14px, or 16px */
 }
 
 .icon-btn {
@@ -824,7 +825,8 @@ svg {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 16px;
-    align-items: stretch; /* default, but explicit here */
+    align-items: stretch;
+    /* default, but explicit here */
 }
 
 .guest-card {
@@ -834,7 +836,8 @@ svg {
 }
 
 .card-actions {
-    margin-top: auto; /* keeps the bottom row (confirmed/pending + icons) aligned across all cards */
+    margin-top: auto;
+    /* keeps the bottom row (confirmed/pending + icons) aligned across all cards */
 }
 
 /*====== show guests ======*/
@@ -842,16 +845,17 @@ svg {
    Voltar / breadcrumb
 ============================ */
 .back-link {
-  display: inline-block;
-  margin-bottom: 1.5rem;
-  font-size: 0.875rem;
-  color: #8C7A6B;
-  transition: color 0.2s ease;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    color: #8C7A6B;
+    transition: color 0.2s ease;
 }
- 
+
 .back-link:hover {
-  color: #4A5D42;
+    color: #4A5D42;
 }
+
 /* ============================
    Card principal
 ============================ */
@@ -1045,44 +1049,442 @@ svg {
     color: #FFFFFF;
 }
 
+.wp-companions-modal,
+.wp-companions-modal * {
+    box-sizing: border-box;
+}
 
+.wp-companions-modal {
+    font-family: 'Manrope', sans-serif;
+}
 
-    @media (max-width: 720px) {
-        .sidebar {
-            display: none;
-        }
+.wp-companions-modal .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(60, 58, 52, 0.45);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
 
-        .main {
-            padding: 20px 16px;
-        }
+.wp-companions-modal .modal-overlay.active {
+    display: flex;
+}
 
-        .stats-row {
-            flex-wrap: wrap;
-        }
+.wp-companions-modal .modal {
+    background: #ffffff;
+    width: 100%;
+    max-width: 480px;
+    max-height: 85vh;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
 
-        .stat-pill {
-            min-width: calc(50% - 6px);
-        }
+.wp-companions-modal .modal-header {
+    padding: 24px 28px 16px;
+    border-bottom: 1px solid #e4e1d8;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
 
-        .row-meta {
-            display: none;
-        }
+.wp-companions-modal .modal-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 26px;
+    margin: 0 0 4px;
+    color: #3c3a34;
+    line-height: 1.2;
+}
+
+.wp-companions-modal .modal-header p {
+    margin: 0;
+    font-size: 13px;
+    color: #8b8880;
+    line-height: 1.4;
+}
+
+.wp-companions-modal .close-btn {
+    appearance: none;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #8b8880;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px;
+    margin: 0;
+}
+
+.wp-companions-modal .close-btn:hover {
+    color: #3c3a34;
+}
+
+.wp-companions-modal .modal-body {
+    padding: 20px 28px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.wp-companions-modal .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #8b8880;
+    margin: 0 0 12px;
+}
+
+.wp-companions-modal .companion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.wp-companions-modal .companion-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #eef1ea;
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.wp-companions-modal .companion-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #8a9a80;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.wp-companions-modal .companion-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.wp-companions-modal .companion-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #3c3a34;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.wp-companions-modal .companion-age {
+    font-size: 12px;
+    color: #8b8880;
+}
+
+.wp-companions-modal .remove-btn {
+    appearance: none;
+    background: none;
+    border: none;
+    color: #8b8880;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 4px 6px;
+    margin: 0;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.wp-companions-modal .remove-btn:hover {
+    color: #c0605a;
+    background: rgba(192, 96, 90, 0.1);
+}
+
+.wp-companions-modal .empty-state {
+    font-size: 13px;
+    color: #8b8880;
+    text-align: center;
+    padding: 20px 0;
+    font-style: italic;
+}
+
+.wp-companions-modal .add-companion-btn {
+    appearance: none;
+    font-family: 'Manrope', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    background: none;
+    border: 1px dashed #e4e1d8;
+    color: #6f7d67;
+    padding: 10px 12px;
+    margin: 0;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+}
+
+.wp-companions-modal .add-companion-btn:hover {
+    background: #eef1ea;
+    border-color: #8a9a80;
+}
+
+.wp-companions-modal .add-companion-btn .plus-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #8a9a80;
+    color: #fff;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.wp-companions-modal .add-form-wrapper {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    background: #eef1ea;
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.wp-companions-modal .add-form-wrapper.active {
+    display: flex;
+}
+
+.wp-companions-modal .add-form {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.wp-companions-modal .field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.wp-companions-modal .field label {
+    font-size: 11px;
+    color: #8b8880;
+    font-weight: 500;
+}
+
+.wp-companions-modal .field input {
+    appearance: none !important;
+    font-family: 'Manrope', sans-serif;
+    border: 1px solid #e4e1d8 !important;
+    border-radius: 8px !important;
+    padding: 0 10px !important;
+    margin: 0 !important;
+    font-size: 14px;
+    color: #3c3a34;
+    background: #fff !important;
+    width: 100%;
+    height: 38px !important;
+    line-height: 38px !important;
+}
+
+.wp-companions-modal .field input:focus {
+    outline: none;
+    border-color: #8a9a80;
+    box-shadow: none;
+}
+
+.wp-companions-modal .field-name {
+    flex: 1;
+}
+
+.wp-companions-modal .field-age {
+    width: 72px;
+}
+
+.wp-companions-modal .add-btn {
+    appearance: none !important;
+    background: #c17f59 !important;
+    color: #fff;
+    border: none !important;
+    border-radius: 8px !important;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px;
+    min-height: 38px;
+    padding: 0 !important;
+    font-size: 18px;
+    margin: 0 !important;
+    cursor: pointer;
+    flex-shrink: 0;
+    line-height: 1;
+    align-self: flex-end;
+}
+
+.wp-companions-modal .add-btn:hover {
+    background: #a8663f;
+}
+
+.wp-companions-modal .form-error {
+    font-size: 12px;
+    color: #c0605a;
+    margin: 6px 0 0;
+    display: none;
+}
+
+.wp-companions-modal .form-error.active {
+    display: block;
+}
+
+.wp-companions-modal .modal-footer {
+    padding: 16px 28px 22px;
+    border-top: 1px solid #e4e1d8;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.wp-companions-modal .btn-secondary {
+    appearance: none;
+    font-family: 'Manrope', sans-serif;
+    background: none;
+    border: 1px solid #e4e1d8;
+    color: #3c3a34;
+    padding: 10px 18px;
+    margin: 0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.wp-companions-modal .btn-secondary:hover {
+    background: #f6f4ee;
+}
+
+.wp-companions-modal .btn-primary {
+    appearance: none;
+    font-family: 'Manrope', sans-serif;
+    background: #8a9a80;
+    border: none;
+    color: #fff;
+    padding: 10px 18px;
+    margin: 0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.wp-companions-modal .btn-primary:hover {
+    background: #6f7d67;
+}
+
+@media (max-width: 480px) {
+    .wp-companions-modal .modal-overlay {
+        padding: 0;
+        align-items: flex-end;
     }
 
-    @media (max-width: 768px) {
-        .view-toggle {
-            display: none;
-        }
-
-        .btn-primary .btn-text {
-            display: none;
-        }
-
-        .btn-primary {
-            padding: 10px;
-            /* fica quadrado/redondo só com o ícone */
-            width: 40px;
-            height: 40px;
-            justify-content: center;
-        }
+    .wp-companions-modal .modal {
+        max-width: 100%;
+        max-height: 90vh;
+        border-radius: 20px 20px 0 0;
     }
+
+    .wp-companions-modal .modal-header {
+        padding: 20px 20px 14px;
+    }
+
+    .wp-companions-modal .modal-header h2 {
+        font-size: 22px;
+    }
+
+    .wp-companions-modal .modal-body {
+        padding: 16px 20px;
+    }
+
+    .wp-companions-modal .add-form {
+        flex-wrap: wrap;
+    }
+
+    .wp-companions-modal .field-name {
+        flex: 1 1 100%;
+    }
+
+    .wp-companions-modal .field-age {
+        flex: 0 0 90px;
+        width: 90px;
+    }
+
+    .wp-companions-modal .add-btn {
+        flex: 0 0 auto;
+    }
+
+    .wp-companions-modal .modal-footer {
+        padding: 14px 20px 20px;
+        flex-direction: column-reverse;
+        gap: 8px;
+    }
+
+    .wp-companions-modal .btn-secondary,
+    .wp-companions-modal .btn-primary {
+        width: 100%;
+        padding: 12px 18px;
+        text-align: center;
+        white-space: nowrap;
+    }
+}
+
+
+
+@media (max-width: 720px) {
+    .sidebar {
+        display: none;
+    }
+
+    .main {
+        padding: 20px 16px;
+    }
+
+    .stats-row {
+        flex-wrap: wrap;
+    }
+
+    .stat-pill {
+        min-width: calc(50% - 6px);
+    }
+
+    .row-meta {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .view-toggle {
+        display: none;
+    }
+
+    .btn-primary .btn-text {
+        display: none;
+    }
+
+    .btn-primary {
+        padding: 10px;
+        /* fica quadrado/redondo só com o ícone */
+        width: 40px;
+        height: 40px;
+        justify-content: center;
+    }
+}

@@ -83,6 +83,32 @@ header .navbar-brand img {
     font-family: var(--primary-font);
     text-transform: none
 }
+
+.sliding-box-img {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+.sliding-box-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+@media (max-width: 767px) {
+    .sliding-box-img {
+        height: auto;
+        aspect-ratio: 16 / 10;
+    }
+
+    .sliding-box-img img {
+        height: 100%;
+    }
+}
+
 footer {
     padding-top: 80px;
     padding-bottom: 80px;

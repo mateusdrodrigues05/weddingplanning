@@ -23,6 +23,9 @@
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/responsive.css" />
     <link rel="stylesheet" href="demos/wedding-invitation/wedding-invitation.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" 
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body data-mobile-nav-style="classic">
@@ -61,6 +64,8 @@
             </div>
         </div>
     </section>
+
+
     <!-- end banner slider -->
     {{-- <!-- start section -->
     <section id="couple" class="bg-very-light-gray position-relative">
@@ -322,6 +327,8 @@
         </div>
     </section>
     <!-- end section --> --}}
+
+
     <!-- start section -->
     <section id="timeline" class="bg-white cover-background background-position-center-bottom position-relative">
         <div class="container">
@@ -337,6 +344,8 @@
                     </div>
                 </div>
             </div>
+
+
             {{-- <div class="row">
                 <div class="col-md-6 pt-10 position-relative">
                     <div
@@ -353,8 +362,12 @@
                     </div>
                 </div>
             </div> --}}
+
+
         </div>
     </section>
+
+
     <!-- end section -->
     {{-- <!-- start section -->
     <section id="people" class="bg-very-light-gray pt-2">
@@ -432,6 +445,7 @@
     <!-- end section --> --}}
     <!-- start section-->
 
+
     <section class="m-0 pt-0 pb-10">
         <div class="d-flex justify-content-center">
             <div class="rounded-2xl bg-[#f7f5f0] p-0" style="max-width: 320px; width: 100%;">
@@ -466,7 +480,9 @@
             <div class="row justify-content-center g-0">
                 <div class="col-12 sliding-box-style-02 sliding-box d-flex lg-flex-nowrap flex-wrap"
                     data-anime='{ "el": "childs", "translateX": [30, 0], "opacity": [0,1], "duration": 300, "delay": 0, "staggervalue": 100, "easing": "easeOutQuad" }'>
-                    <!-- start interactive banners item -->
+                    
+                    
+                    {{-- <!-- start interactive banners item -->
                     <div class="sliding-box-item box-shadow-extra-large md-mb-30px active">
                         <div class="sliding-box-img position-relative">
                             <img src="https://placehold.co/580x695" alt="" class="w-100" />
@@ -490,52 +506,53 @@
                             </div>
                         </div>
                     </div>
-                    <!-- end interactive banners item -->
+                    <!-- end interactive banners item --> --}}
+
+
                     <!-- start interactive banners item -->
-                    <div class="sliding-box-item box-shadow-extra-large md-mb-30px">
+                    <div class="sliding-box-item box-shadow-extra-large md-mb-30px active">
                         <div class="sliding-box-img position-relative">
-                            <img src="https://placehold.co/580x695" alt="" class="w-100" />
-                            <time
+                            <img src="{{ asset("/img/Sé_Catedral_de_Beja.jpg") }}" alt="" class="w-100" />
+                            {{-- <time
                                 class="alt-font text-center bg-dark-gray text-white text-uppercase fw-500 d-inline-block w-80px pt-20px pb-20px position-absolute bottom-25px left-25px">
-                                <span class="fs-45 lh-40 d-block">24</span>
-                                <span class="d-block lh-20">Março</span>
-                            </time>
+                                <span class="fs-45 lh-40 d-block">8</span>
+                                <span class="d-block lh-20">Maio</span>
+                            </time> --}}
                         </div>
                         <div
                             class="d-flex flex-column align-items-start justify-content-center sliding-box-content bg-very-light-gray p-30px">
                             <div class="content-hover w-100 last-paragraph-no-margin">
-                                <i class="line-icon-Birthday-Cake text-dark-gray icon-large mb-40px"></i>
+                                <i class="fa-solid fa-church fa-2x"></i>
                                 <div class="text-dark-gray mb-5px fs-19 fw-600">A cerimónia</div>
-                                <p class="lh-28">175 Broadway, Brooklyn, Nova Iorque 11244, EUA</p>
+                                <p class="lh-28">Sé Catedral de Beja</p>
                                 <div
                                     class="text-dark-gray d-flex align-items-center border-top border-color-extra-medium-gray mt-20px pt-20px">
-                                    <i class="feather icon-feather-clock align-middle icon-small me-5px"></i>
-                                    <span class="fs-15 text-uppercase">Das 15:00 às 17:00</span>
+                                    <i class="fa-solid fa-clock "></i>
+                                    <span class="fs-15 text-uppercase ms-2">11:00</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- end interactive banners item -->
                     <!-- start interactive banners item -->
-                    <div class="sliding-box-item box-shadow-extra-large">
+                    <div class="sliding-box-item box-shadow-extra-large ">
                         <div class="sliding-box-img position-relative">
-                            <img src="https://placehold.co/580x695" alt="" class="w-100" />
-                            <time
-                                class="alt-font text-center bg-dark-gray text-white text-uppercase fw-500 d-inline-block w-80px pt-20px pb-20px position-absolute bottom-25px left-25px">
+                            <img src="{{ asset('img/Sé_Catedral_de_Beja.jpg') }}" alt="A festa após a cerimónia" class="w-100" />
+                            {{-- <time class="alt-font text-center bg-dark-gray text-white text-uppercase fw-500 d-inline-block w-80px pt-20px pb-20px position-absolute bottom-25px left-25px">
                                 <span class="fs-45 lh-40 d-block">25</span>
                                 <span class="d-block lh-20">Março</span>
-                            </time>
+                            </time> --}}
                         </div>
                         <div
                             class="d-flex flex-column align-items-start justify-content-center sliding-box-content bg-very-light-gray p-30px">
                             <div class="content-hover w-100 last-paragraph-no-margin">
-                                <i class="line-icon-Martini-Glass text-dark-gray icon-large mb-40px"></i>
+                                <i class="fa-solid fa-champagne-glasses fa-2x"></i>
                                 <div class="text-dark-gray mb-5px fs-19 fw-600">A festa após a cerimónia</div>
-                                <p class="lh-28">175 Broadway, Brooklyn, Nova Iorque 11244, EUA</p>
+                                <p class="lh-28">Quinta dos Magalhães em Beringel</p>
                                 <div
                                     class="text-dark-gray d-flex align-items-center border-top border-color-extra-medium-gray mt-20px pt-20px">
-                                    <i class="feather icon-feather-clock align-middle icon-small me-5px"></i>
-                                    <span class="fs-15 text-uppercase">Das 17:00 às 22:30</span>
+                                    <i class="fa-solid fa-clock"></i>
+                                    <span class="fs-15 text-uppercase ms-2">15:00</span>
                                 </div>
                             </div>
                         </div>
@@ -564,6 +581,7 @@
             </div>
         </div>
     </section>
+
 
     <!-- start rsvp modal -->
         <div class="modal fade" id="rsvpModal" tabindex="-1" aria-labelledby="rsvpModalLabel" aria-hidden="true">
@@ -650,6 +668,8 @@
         </div>
     <!-- end rsvp modal -->
     <!-- end section -->
+    
+
     {{-- <!-- start section -->
     <section id="rsvp" class="bg-very-light-gray">
         <div class="container">
@@ -766,6 +786,8 @@
         </div>
     </footer>
     <!-- end section --> --}}
+
+
     <!-- start scroll progress -->
     <div class="scroll-progress d-none d-xxl-block">
         <a href="#" class="scroll-top" aria-label="scroll">

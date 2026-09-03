@@ -5427,3 +5427,4 @@ function initMap() {
     renderStepIndicator();
     showPanel(1);
 })();
+

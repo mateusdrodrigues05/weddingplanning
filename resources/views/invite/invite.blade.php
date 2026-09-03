@@ -449,9 +449,9 @@
     <section class="m-0 pt-0 pb-10">
         <div class="d-flex justify-content-center">
             <div class="rounded-2xl bg-[#f7f5f0] p-0" style="max-width: 380px; width: 100%;">
-                <video class="w-100 rounded-xl object-cover"
-                    style="aspect-ratio: 9 / 16; max-height: 520px; object-fit: cover;"
-                    src="{{ asset('video/convite.mp4') }}" autoplay loop
+                <video id="conviteVideo" class="w-100 rounded-xl object-cover"
+                    style="aspect-ratio: 9 / 16; max-height: 680px; object-fit: cover;"
+                    src="{{ asset('video/convite.mp4') }}" loop
                     muted playsinline>
                 </video>
             </div>
@@ -807,6 +807,35 @@
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/vendors.min.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
+    <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.addEventListener('load', () => {
+            window.scrollTo(0, 0);
+        });
+    </script>
+    <script>
+        (function () {
+            const video = document.getElementById('conviteVideo');
+            if (!video) return;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        video.play().catch(() => {});
+                    } else {
+                        video.pause();
+                    }
+                });
+            }, {
+                threshold: 0.5, // at least 50% of the video visible before it plays
+            });
+
+            observer.observe(video);
+        })();
+    </script>
+
 </body>
 
 </html>

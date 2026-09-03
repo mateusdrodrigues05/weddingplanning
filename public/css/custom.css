@@ -634,7 +634,7 @@ svg {
     grid-column: 1/-1;
 }
 
-/* Modal */
+/* ====== Modal ========= */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -1049,6 +1049,9 @@ svg {
     color: #FFFFFF;
 }
 
+
+
+
 .wp-companions-modal,
 .wp-companions-modal * {
     box-sizing: border-box;
@@ -1445,6 +1448,70 @@ svg {
         text-align: center;
         white-space: nowrap;
     }
+}
+
+
+/*===== fix ======*/
+/* =========================
+   RSVP MODAL FIX
+   ========================= */
+
+#rsvpModal {
+    overflow-x: hidden;
+}
+
+#rsvpModal .modal-dialog {
+    width: 100%;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#rsvpModal .modal-content {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#rsvpModal .modal-body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+/* All RSVP content must stay inside modal */
+#rsvpModal form,
+#rsvpModal .rsvp-panel,
+#rsvpModal .rsvp-field,
+#rsvpModal .rsvp-steps-nav,
+#rsvpModal .rsvp-actions {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Inputs */
+#rsvpModal input,
+#rsvpModal textarea,
+#rsvpModal select {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* Buttons shouldn't cause overflow */
+#rsvpModal button {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Prevent long text from creating horizontal overflow */
+#rsvpModal * {
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 

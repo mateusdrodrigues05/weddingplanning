@@ -23,9 +23,9 @@
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/responsive.css" />
     <link rel="stylesheet" href="demos/wedding-invitation/wedding-invitation.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
-      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" 
-      crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body data-mobile-nav-style="classic">
@@ -340,7 +340,7 @@
                         class="mb-0 lg-mb-30px alt-font text-dark-gray text-uppercase fw-400 border-end lg-border-end-0 border-color-extra-medium-gray pe-30px me-30px lg-pe-0 lg-me-0">
                         Falta</h2>
                     <div class="d-flex justify-content-center countdown-style-03 xs-w-80 xs-mx-auto mt-2">
-                        <div data-enddate="2027/08/08 00:00:00" class="countdown"></div>
+                        <div data-enddate="2027/05/08 00:00:00" class="countdown"></div>
                     </div>
                 </div>
             </div>
@@ -448,15 +448,11 @@
 
     <section class="m-0 pt-0 pb-10">
         <div class="d-flex justify-content-center">
-            <div class="rounded-2xl bg-[#f7f5f0] p-0" style="max-width: 320px; width: 100%;">
-                <video
-                    class="w-100 rounded-xl object-cover"
+            <div class="rounded-2xl bg-[#f7f5f0] p-0" style="max-width: 380px; width: 100%;">
+                <video class="w-100 rounded-xl object-cover"
                     style="aspect-ratio: 9 / 16; max-height: 520px; object-fit: cover;"
-                    src="{{ asset('video/Nos vemos no altar pré wedding romântico vídeo vertical.mp4') }}"
-                    autoplay
-                    loop
-                    muted
-                    playsinline>
+                    src="{{ asset('video/convite.mp4') }}" autoplay loop
+                    muted playsinline>
                 </video>
             </div>
         </div>
@@ -480,8 +476,8 @@
             <div class="row justify-content-center g-0">
                 <div class="col-12 sliding-box-style-02 sliding-box d-flex lg-flex-nowrap flex-wrap"
                     data-anime='{ "el": "childs", "translateX": [30, 0], "opacity": [0,1], "duration": 300, "delay": 0, "staggervalue": 100, "easing": "easeOutQuad" }'>
-                    
-                    
+
+
                     {{-- <!-- start interactive banners item -->
                     <div class="sliding-box-item box-shadow-extra-large md-mb-30px active">
                         <div class="sliding-box-img position-relative">
@@ -512,7 +508,7 @@
                     <!-- start interactive banners item -->
                     <div class="sliding-box-item box-shadow-extra-large md-mb-30px active">
                         <div class="sliding-box-img position-relative">
-                            <img src="{{ asset("/img/Sé_Catedral_de_Beja.jpg") }}" alt="" class="w-100" />
+                            <img src="{{ asset('/img/Sé_Catedral_de_Beja.jpg') }}" alt="" class="w-100" />
                             {{-- <time
                                 class="alt-font text-center bg-dark-gray text-white text-uppercase fw-500 d-inline-block w-80px pt-20px pb-20px position-absolute bottom-25px left-25px">
                                 <span class="fs-45 lh-40 d-block">8</span>
@@ -537,7 +533,8 @@
                     <!-- start interactive banners item -->
                     <div class="sliding-box-item box-shadow-extra-large ">
                         <div class="sliding-box-img position-relative">
-                            <img src="{{ asset('img/Sé_Catedral_de_Beja.jpg') }}" alt="A festa após a cerimónia" class="w-100" />
+                            <img src="{{ asset('img/party.jpg') }}" alt="A festa após a cerimónia"
+                                class="w-100 h-290px" />
                             {{-- <time class="alt-font text-center bg-dark-gray text-white text-uppercase fw-500 d-inline-block w-80px pt-20px pb-20px position-absolute bottom-25px left-25px">
                                 <span class="fs-45 lh-40 d-block">25</span>
                                 <span class="d-block lh-20">Março</span>
@@ -570,13 +567,21 @@
             <div class="row justify-content-center">
                 <div class="col-lg-8 text-center"
                     data-anime='{ "el": "childs", "translateY": [20, 0], "opacity": [0,1], "duration": 300, "delay": 0, "staggervalue": 100, "easing": "easeOutQuad" }'>
-                    <span class="d-inline-block text-base-color fs-22 alt-font mb-10px text-uppercase">Confirme a sua
-                        presença</span>
-                    <h2 class="mb-30px alt-font text-dark-gray text-uppercase fw-400">Vai comparecer?</h2>
-                    <button type="button" class="btn btn-medium btn-dark-gray btn-box-shadow btn-round-edge"
-                        data-bs-toggle="modal" data-bs-target="#rsvpModal">
-                        Confirmar presença
-                    </button>
+                    <h5 class="mb-30px alt-font text-dark-gray text-uppercase fw-400">
+                        Confirme a sua Presença
+                    </h5>
+
+                    <div class="d-flex flex-column align-items-center">
+
+                        <button type="button"
+                            class="btn btn-medium btn-dark-gray btn-box-shadow btn-round-edge"
+                            data-bs-toggle="modal"
+                            data-bs-target="#rsvpModal">
+                            Confirmar Presença
+                        </button>
+
+                        <p class="mt-2">Até <span>1 de Março</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -584,91 +589,93 @@
 
 
     <!-- start rsvp modal -->
-        <div class="modal fade" id="rsvpModal" tabindex="-1" aria-labelledby="rsvpModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content" style="border-radius:14px;">
+    <div class="modal fade" id="rsvpModal" tabindex="-1" aria-labelledby="rsvpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="border-radius:14px;">
                 <div class="modal-header border-0 pb-0">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-4 px-md-5 pb-4 pt-0">
-            
+
                     <!-- step indicator -->
                     <div class="rsvp-steps-nav" id="rsvpStepsNav">
-                    <div class="rsvp-step-item active" data-step="1">
-                        <div class="rsvp-step-circle">1</div>
-                        <div class="rsvp-step-label">Contacto</div>
+                        <div class="rsvp-step-item active" data-step="1">
+                            <div class="rsvp-step-circle">1</div>
+                            <div class="rsvp-step-label">Contacto</div>
+                        </div>
+                        <div class="rsvp-step-connector"></div>
+                        <div class="rsvp-step-item" data-step="2">
+                            <div class="rsvp-step-circle">2</div>
+                            <div class="rsvp-step-label">Acompanhantes</div>
+                        </div>
+                        <div class="rsvp-step-connector"></div>
+                        <div class="rsvp-step-item" data-step="3">
+                            <div class="rsvp-step-circle">3</div>
+                            <div class="rsvp-step-label">Alergias</div>
+                        </div>
                     </div>
-                    <div class="rsvp-step-connector"></div>
-                    <div class="rsvp-step-item" data-step="2">
-                        <div class="rsvp-step-circle">2</div>
-                        <div class="rsvp-step-label">Acompanhantes</div>
-                    </div>
-                    <div class="rsvp-step-connector"></div>
-                    <div class="rsvp-step-item" data-step="3">
-                        <div class="rsvp-step-circle">3</div>
-                        <div class="rsvp-step-label">Alergias</div>
-                    </div>
-                    </div>
-            
+
                     <form id="rsvpForm" novalidate>
-            
-                    <!-- STEP 1: name + contact -->
-                    <div class="rsvp-panel" data-panel="1">
-                        <h6>Os seus dados</h6>
-                        <div class="rsvp-field" id="fieldName">
-                        <label for="guestName">Nome completo *</label>
-                        <input type="text" id="guestName" placeholder="O seu nome" />
-                        <div class="field-error-msg">Por favor, indique o seu nome.</div>
+
+                        <!-- STEP 1: name + contact -->
+                        <div class="rsvp-panel" data-panel="1">
+                            <h6>Os seus dados</h6>
+                            <div class="rsvp-field" id="fieldName">
+                                <label for="guestName">Nome completo *</label>
+                                <input type="text" id="guestName" placeholder="O seu nome" />
+                                <div class="field-error-msg">Por favor, indique o seu nome.</div>
+                            </div>
+
+                            <div class="rsvp-field" id="fieldContact">
+                                <label>Como prefere ser contactado? *</label>
+                                <div class="contact-toggle">
+                                    <button type="button" class="active" data-contact-type="email">Email</button>
+                                    <button type="button" data-contact-type="phone">Telefone</button>
+                                </div>
+                                <input type="text" id="contactValue" placeholder="exemplo@email.com" />
+                                <div class="field-error-msg">Indique um contacto válido.</div>
+                            </div>
                         </div>
-            
-                        <div class="rsvp-field" id="fieldContact">
-                        <label>Como prefere ser contactado? *</label>
-                        <div class="contact-toggle">
-                            <button type="button" class="active" data-contact-type="email">Email</button>
-                            <button type="button" data-contact-type="phone">Telefone</button>
+
+                        <!-- STEP 2: companions -->
+                        <div class="rsvp-panel" data-panel="2" hidden>
+                            <h6>Vai levar acompanhantes?</h6>
+                            <div class="rsvp-field companions-count-field" id="fieldCompanionsCount">
+                                <label for="companionsCount">Número de acompanhantes</label>
+                                <input type="number" id="companionsCount" min="0" max="10"
+                                    value="0" />
+                            </div>
+                            <div id="companionsContainer"></div>
                         </div>
-                        <input type="text" id="contactValue" placeholder="exemplo@email.com" />
-                        <div class="field-error-msg">Indique um contacto válido.</div>
+
+                        <!-- STEP 3: allergies -->
+                        <div class="rsvp-panel" data-panel="3" hidden>
+                            <h6>Alguma alergia ou restrição alimentar?</h6>
+                            <div id="allergiesContainer"></div>
                         </div>
-                    </div>
-            
-                    <!-- STEP 2: companions -->
-                    <div class="rsvp-panel" data-panel="2" hidden>
-                        <h6>Vai levar acompanhantes?</h6>
-                        <div class="rsvp-field companions-count-field" id="fieldCompanionsCount">
-                        <label for="companionsCount">Número de acompanhantes</label>
-                        <input type="number" id="companionsCount" min="0" max="10" value="0" />
+
+                        <div class="rsvp-actions">
+                            <button type="button" class="btn-back" id="btnBack" disabled>Voltar</button>
+                            <button type="button" class="btn-next" id="btnNext">Seguinte</button>
+                            <button type="submit" class="btn-submit" id="btnSubmit" hidden>Confirmar
+                                presença</button>
                         </div>
-                        <div id="companionsContainer"></div>
-                    </div>
-            
-                    <!-- STEP 3: allergies -->
-                    <div class="rsvp-panel" data-panel="3" hidden>
-                        <h6>Alguma alergia ou restrição alimentar?</h6>
-                        <div id="allergiesContainer"></div>
-                    </div>
-            
-                    <div class="rsvp-actions">
-                        <button type="button" class="btn-back" id="btnBack" disabled>Voltar</button>
-                        <button type="button" class="btn-next" id="btnNext">Seguinte</button>
-                        <button type="submit" class="btn-submit" id="btnSubmit" hidden>Confirmar presença</button>
-                    </div>
                     </form>
-            
+
                     <!-- success state -->
                     <div class="rsvp-success" id="rsvpSuccess" hidden>
-                    <div class="icon">&#10003;</div>
-                    <h5>Presença confirmada!</h5>
-                    <p>Obrigado por nos avisar. Mal podemos esperar para celebrar convosco.</p>
+                        <div class="icon">&#10003;</div>
+                        <h5>Presença confirmada!</h5>
+                        <p>Obrigado por nos avisar. Mal podemos esperar para celebrar convosco.</p>
                     </div>
-            
-                </div>
+
                 </div>
             </div>
         </div>
+    </div>
     <!-- end rsvp modal -->
     <!-- end section -->
-    
+
 
     {{-- <!-- start section -->
     <section id="rsvp" class="bg-very-light-gray">

@@ -1476,53 +1476,67 @@ svg {
 }
 
 
-/*===== fix ======*/
 /* =========================
    RSVP MODAL FIX
    ========================= */
 
-/* FIX RSVP MODAL WIDTH */
 #rsvpModal {
-    width: 100%;
     overflow-x: hidden !important;
 }
 
 #rsvpModal .modal-dialog {
-    max-width: min(500px, 92vw);
-}
-
-/* iOS sometimes still nudges the body when a fixed/centered modal is focused */
-#rsvpModal input,
-#rsvpModal textarea {
-    -webkit-text-size-adjust: 100%;
+    width: 100%;
+    max-width: 500px !important;
+    margin: 1.75rem auto;
 }
 
 #rsvpModal .modal-content {
     width: 100% !important;
-    max-width: 760px !important;
+    max-width: 500px !important;
+    box-sizing: border-box !important;
     overflow: hidden !important;
+    border-radius: 14px;
 }
 
 #rsvpModal .modal-body {
     width: 100% !important;
     max-width: 100% !important;
+    box-sizing: border-box !important;
     overflow-x: hidden !important;
 }
 
-/* IMPORTANT: inputs must never grow */
+/* Inputs */
 #rsvpModal input,
 #rsvpModal select,
 #rsvpModal textarea {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     font-size: 16px !important;
 }
 
-/* Prevent focus styles from changing dimensions */
+/* Don't change dimensions on focus */
 #rsvpModal input:focus,
-#rsvpModal textarea:focus,
-#rsvpModal select:focus {
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
+#rsvpModal select:focus,
+#rsvpModal textarea:focus {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    outline: none;
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    #rsvpModal .modal-dialog {
+        width: calc(100% - 24px);
+        max-width: none !important;
+        margin: 12px auto;
+    }
+
+    #rsvpModal .modal-content {
+        width: 100% !important;
+        max-width: none !important;
+    }
 }
 
 

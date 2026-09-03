@@ -19811,7 +19811,7 @@ canvas {
   @media (max-width: 576px) {
     .rsvp-step-label { font-size: 10px; }
     .rsvp-step-circle { width: 30px; height: 30px; font-size: 12px; }
-    .rsvp-step-item { width: 96px; }
+    .rsvp-step-item { width: 98px; }
     .companion-grid { grid-template-columns: 1fr; }
     .rsvp-actions button { padding: 10px 18px; font-size: 13px; }
   }

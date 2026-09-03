@@ -4958,6 +4958,15 @@ function initMap() {
     let contactType = "email";
     const totalSteps = 3;
 
+    // TODO: adjust this to match your actual Laravel route
+    // e.g. "/weddings/{{ $wedding->slug }}/rsvp" if this page is per-wedding
+    const RSVP_ENDPOINT = "/rsvp";
+
+    // Flip this to true once the controller/route exist. While false, the form
+    // still builds the payload (buildPayload) but just shows the success view
+    // locally instead of sending it anywhere — nothing is persisted yet.
+    const SEND_TO_BACKEND = false;
+
     const stepItems = document.querySelectorAll(".rsvp-step-item");
     const connectors = document.querySelectorAll(".rsvp-step-connector");
     const panels = document.querySelectorAll(".rsvp-panel");
@@ -4966,6 +4975,8 @@ function initMap() {
     const btnSubmit = document.getElementById("btnSubmit");
     const form = document.getElementById("rsvpForm");
     const successView = document.getElementById("rsvpSuccess");
+    const contactInput = document.getElementById("contactValue");
+    const formErrorBanner = document.getElementById("rsvpFormError");
 
     // ---------- contact type toggle ----------
     document.querySelectorAll("[data-contact-type]").forEach((btn) => {
@@ -4975,14 +4986,30 @@ function initMap() {
                 .forEach((b) => b.classList.remove("active"));
             btn.classList.add("active");
             contactType = btn.dataset.contactType;
-            const input = document.getElementById("contactValue");
-            input.value = "";
-            input.placeholder =
-                contactType === "email"
-                    ? "exemplo@email.com"
-                    : "+351 912 345 678";
+
+            contactInput.value = "";
             clearError("fieldContact");
+
+            if (contactType === "phone") {
+                contactInput.type = "tel";
+                contactInput.inputMode = "numeric";
+                contactInput.setAttribute("pattern", "[0-9]*");
+                contactInput.setAttribute("maxlength", "9");
+                contactInput.placeholder = "912345678";
+            } else {
+                contactInput.type = "email";
+                contactInput.inputMode = "email";
+                contactInput.removeAttribute("pattern");
+                contactInput.removeAttribute("maxlength");
+                contactInput.placeholder = "exemplo@email.com";
+            }
         });
+    });
+
+    // digits-only, 9-char hard limit while typing on the phone field
+    contactInput.addEventListener("input", () => {
+        if (contactType !== "phone") return;
+        contactInput.value = contactInput.value.replace(/\D/g, "").slice(0, 9);
     });
 
     // ---------- helpers: errors ----------
@@ -5023,11 +5050,17 @@ function initMap() {
         setTimeout(() => item.classList.remove("error"), 350);
     }
 
-    // ---------- validation ----------
+    function goToStep(step) {
+        currentStep = step;
+        renderStepIndicator();
+        showPanel(step);
+    }
+
+    // ---------- validation (client-side, mirrors what the controller checks) ----------
     function validateStep1() {
         let valid = true;
         const name = document.getElementById("guestName").value.trim();
-        const contact = document.getElementById("contactValue").value.trim();
+        const contact = contactInput.value.trim();
 
         if (!name) {
             setError("fieldName");
@@ -5037,7 +5070,7 @@ function initMap() {
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneRegex = /^[+]?[\d\s()-]{7,15}$/;
+        const phoneRegex = /^\d{9}$/;
         const contactOk =
             contactType === "email"
                 ? emailRegex.test(contact)
@@ -5057,7 +5090,7 @@ function initMap() {
         let valid = true;
         document
             .querySelectorAll("#companionsContainer .companion-row")
-            .forEach((row, i) => {
+            .forEach((row) => {
                 const nameInput = row.querySelector(".companion-name");
                 const fieldWrap = row.querySelector(".rsvp-field");
                 if (!nameInput.value.trim()) {
@@ -5106,26 +5139,26 @@ function initMap() {
                 row.className = "companion-row";
                 row.innerHTML = `
         <div class="companion-row-header">
-          <span class="companion-row-title">Acompanhante ${i + 1}</span>
-          <svg class="companion-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <span class="companion-row-title">Acompanhante ${i + 1}</span>
+        <svg class="companion-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none">
             <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+        </svg>
         </div>
         <div class="companion-row-body">
-          <div class="rsvp-field">
+        <div class="rsvp-field">
             <label>Nome *</label>
             <input type="text" class="companion-name" placeholder="Nome do acompanhante" />
             <div class="field-error-msg">Indique o nome do acompanhante.</div>
-          </div>
-          <div class="rsvp-field">
+        </div>
+        <div class="rsvp-field">
             <label>Faixa etária</label>
             <div class="age-bracket-toggle">
-              <button type="button" class="age-bracket-btn" data-age="under3">&lt; 3 anos</button>
-              <button type="button" class="age-bracket-btn" data-age="under12">&lt; 12 anos</button>
-              <button type="button" class="age-bracket-btn active" data-age="over12">12+ anos</button>
+            <button type="button" class="age-bracket-btn" data-age="under3">&lt; 3 anos</button>
+            <button type="button" class="age-bracket-btn" data-age="under12">&lt; 12 anos</button>
+            <button type="button" class="age-bracket-btn active" data-age="over12">12+ anos</button>
             </div>
             <input type="hidden" class="companion-age-bracket" value="over12" />
-          </div>
+        </div>
         </div>`;
                 companionsContainer.appendChild(row);
             }
@@ -5136,21 +5169,17 @@ function initMap() {
             }
         }
 
-        // auto-expand the first row, collapse the rest, on regeneration
         const rows = companionsContainer.querySelectorAll(".companion-row");
         rows.forEach((r, idx) => r.classList.toggle("open", idx === 0));
     }
 
-    // event delegation — handles elements in rows added dynamically
     companionsContainer.addEventListener("click", (e) => {
-        // toggle collapse
         const header = e.target.closest(".companion-row-header");
         if (header) {
             header.closest(".companion-row").classList.toggle("open");
             return;
         }
 
-        // age bracket buttons
         const btn = e.target.closest(".age-bracket-btn");
         if (btn) {
             const row = btn.closest(".companion-row");
@@ -5162,7 +5191,6 @@ function initMap() {
         }
     });
 
-    // keep the header title in sync with the entered name
     companionsContainer.addEventListener("input", (e) => {
         if (!e.target.classList.contains("companion-name")) return;
         const row = e.target.closest(".companion-row");
@@ -5186,19 +5214,19 @@ function initMap() {
         });
 
         allergiesContainer.innerHTML = "";
-        names.forEach((name, i) => {
+        names.forEach((name) => {
             const row = document.createElement("div");
             row.className = "allergy-row";
             row.innerHTML = `
         <div class="allergy-guest-name">${name}</div>
         <label class="allergy-check">
-          <input type="checkbox" class="allergy-checkbox" />
-          Tem alergia ou restrição alimentar
+        <input type="checkbox" class="allergy-checkbox" />
+        Tem alergia ou restrição alimentar
         </label>
         <div class="rsvp-field allergy-desc">
-          <label>Descreva</label>
-          <textarea class="allergy-textarea" rows="2" placeholder="Ex: alergia a marisco, intolerância a lactose..."></textarea>
-          <div class="field-error-msg">Descreva a alergia ou restrição.</div>
+        <label>Descreva</label>
+        <textarea class="allergy-textarea" rows="2" placeholder="Ex: alergia a marisco, intolerância a lactose..."></textarea>
+        <div class="field-error-msg">Descreva a alergia ou restrição.</div>
         </div>`;
             allergiesContainer.appendChild(row);
 
@@ -5224,25 +5252,142 @@ function initMap() {
 
         if (currentStep === 2) renderAllergyRows();
 
-        currentStep = Math.min(totalSteps, currentStep + 1);
-        renderStepIndicator();
-        showPanel(currentStep);
+        goToStep(Math.min(totalSteps, currentStep + 1));
     });
 
     btnBack.addEventListener("click", () => {
-        currentStep = Math.max(1, currentStep - 1);
-        renderStepIndicator();
-        showPanel(currentStep);
+        goToStep(Math.max(1, currentStep - 1));
     });
 
-    form.addEventListener("submit", (e) => {
+    // ---------- build payload ----------
+    function buildPayload() {
+        const companions = Array.from(
+            companionsContainer.querySelectorAll(".companion-row"),
+        ).map((row) => ({
+            name: row.querySelector(".companion-name").value.trim(),
+            age_bracket: row.querySelector(".companion-age-bracket").value,
+        }));
+
+        const allergies = Array.from(
+            allergiesContainer.querySelectorAll(".allergy-row"),
+        ).map((row) => ({
+            guest_name: row.querySelector(".allergy-guest-name").textContent.trim(),
+            has_allergy: row.querySelector(".allergy-checkbox").checked,
+            description: row.querySelector(".allergy-textarea").value.trim(),
+        }));
+
+        return {
+            guest: {
+                name: document.getElementById("guestName").value.trim(),
+                contact_type: contactType,
+                contact_value: contactInput.value.trim(),
+            },
+            companions,
+            allergies,
+        };
+    }
+
+    // ---------- error banner ----------
+    function showFormError(message) {
+        if (!formErrorBanner) return;
+        formErrorBanner.textContent = message;
+        formErrorBanner.hidden = false;
+    }
+    function hideFormError() {
+        if (!formErrorBanner) return;
+        formErrorBanner.hidden = true;
+        formErrorBanner.textContent = "";
+    }
+
+    // maps backend validation error keys (Laravel dot-notation) to a step + DOM highlight
+    function applyServerErrors(errors) {
+        let firstStepWithError = null;
+
+        Object.keys(errors).forEach((key) => {
+            if (key.startsWith("guest.name")) {
+                setError("fieldName");
+                firstStepWithError = firstStepWithError || 1;
+            } else if (key.startsWith("guest.contact_value") || key.startsWith("guest.contact_type")) {
+                setError("fieldContact");
+                firstStepWithError = firstStepWithError || 1;
+            } else if (key.startsWith("companions.")) {
+                const idx = parseInt(key.split(".")[1], 10);
+                const row = companionsContainer.querySelectorAll(".companion-row")[idx];
+                if (row) row.querySelector(".rsvp-field").classList.add("field-error");
+                firstStepWithError = firstStepWithError || 2;
+            } else if (key.startsWith("allergies.")) {
+                const idx = parseInt(key.split(".")[1], 10);
+                const row = allergiesContainer.querySelectorAll(".allergy-row")[idx];
+                if (row) row.querySelector(".allergy-desc").classList.add("field-error");
+                firstStepWithError = firstStepWithError || 3;
+            }
+        });
+
+        if (firstStepWithError) goToStep(firstStepWithError);
+
+        const messages = Object.values(errors).flat();
+        showFormError(messages[0] || "Verifique os dados introduzidos e tente novamente.");
+    }
+
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
+        hideFormError();
+
         if (!validateStep3()) {
             flagStepError();
             return;
         }
 
-        // mark last step complete
+        const payload = buildPayload();
+
+        // Not wired to a controller yet — just show success locally.
+        // Everything above (payload shape, error banner, applyServerErrors,
+        // step-jumping) is already built for when SEND_TO_BACKEND flips to true.
+        if (!SEND_TO_BACKEND) {
+            showSuccess();
+            return;
+        }
+
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = "A enviar...";
+
+        try {
+            const csrfToken = document
+                .querySelector('meta[name="csrf-token"]')
+                ?.getAttribute("content");
+
+            const response = await fetch(RSVP_ENDPOINT, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": csrfToken || "",
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.status === 422) {
+                const data = await response.json();
+                applyServerErrors(data.errors || {});
+                return;
+            }
+
+            if (!response.ok) {
+                showFormError("Não foi possível confirmar a sua presença. Tente novamente.");
+                return;
+            }
+
+            showSuccess();
+        } catch (err) {
+            showFormError("Erro de ligação. Verifique a sua internet e tente novamente.");
+        } finally {
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = "Confirmar presença";
+        }
+    });
+
+    function showSuccess() {
         document
             .querySelector('.rsvp-step-item[data-step="3"]')
             .classList.add("completed");
@@ -5250,9 +5395,7 @@ function initMap() {
         form.hidden = true;
         document.getElementById("rsvpStepsNav").hidden = true;
         successView.hidden = false;
-
-        // TODO: send form data to backend here (fetch/axios to your Laravel route)
-    });
+    }
 
     // reset modal state whenever it's closed, so reopening starts fresh
     document
@@ -5265,6 +5408,7 @@ function initMap() {
             successView.hidden = true;
             companionsContainer.innerHTML = "";
             allergiesContainer.innerHTML = "";
+            hideFormError();
             document
                 .querySelectorAll("[data-contact-type]")
                 .forEach((b) => b.classList.remove("active"));
@@ -5272,6 +5416,9 @@ function initMap() {
                 .querySelector('[data-contact-type="email"]')
                 .classList.add("active");
             contactType = "email";
+            contactInput.type = "email";
+            contactInput.removeAttribute("maxlength");
+            contactInput.removeAttribute("pattern");
             ["fieldName", "fieldContact"].forEach(clearError);
             renderStepIndicator();
             showPanel(1);

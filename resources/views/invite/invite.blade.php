@@ -8,7 +8,7 @@
     <meta name="author" content="ThemeZaa">
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <meta name="description"
-        content="Elevate your online presence with Crafto - a modern, versatile, multipurpose Bootstrap 5 responsive HTML5, SCSS template using highly creative 56+ ready demos.">
+        content="Vem festejar este dia tão importante connosco">
     <!-- favicon icon -->
     <link rel="shortcut icon" href="images/favicon.png">
     <link rel="apple-touch-icon" href="images/apple-touch-icon-57x57.png">
@@ -630,7 +630,7 @@
                                 <label>Como prefere ser contactado? *</label>
                                 <div class="contact-toggle">
                                     <button type="button" class="active" data-contact-type="email">Email</button>
-                                    <button type="button" data-contact-type="phone">Telefone</button>
+                                    <button type="button" data-contact-type="phone" >Telefone</button>
                                 </div>
                                 <input type="text" id="contactValue" placeholder="exemplo@email.com" />
                                 <div class="field-error-msg">Indique um contacto válido.</div>

@@ -1051,6 +1051,31 @@ svg {
 
 
 
+/*===== Modal ======*/
+
+
+.wp-companions-modal .modal {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    max-height: 90vh;
+    box-sizing: border-box;
+}
+
+.wp-companions-modal .modal-content {
+    width: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.wp-companions-modal .modal-content {
+    /* Make the modal size stable */
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
 
 .wp-companions-modal,
 .wp-companions-modal * {

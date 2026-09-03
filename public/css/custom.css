@@ -1486,7 +1486,7 @@ svg {
 
 #rsvpModal .modal-dialog {
     width: 100%;
-    max-width: 500px !important;
+    max-width: 300px !important;
     margin: 1.75rem auto;
 }
 

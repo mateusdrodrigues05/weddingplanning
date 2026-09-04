@@ -14,4 +14,20 @@ class InviteController extends Controller
         return view('invite.invite');
     }
 
+    public function store(Request $resquest)
+    {
+        $data = $resquest->all();
+        //main Guest
+        $guest = [
+            'name' => $data['guest_name'],
+            'contact_type' => $data['contact_type'],
+            'contact_value' => $data['contact_value'],
+        ];
+
+        $companions = $data['companions'] ?? [];
+        $allergies = $data['allergies'] ?? [];
+
+        dd($guest, $companions, $allergies);
+    }
+
 }

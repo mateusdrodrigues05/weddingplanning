@@ -7,8 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="author" content="ThemeZaa">
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="description"
-        content="Vem festejar este dia tão importante connosco">
+    <meta name="description" content="Vem festejar este dia tão importante connosco">
     <!-- favicon icon -->
     <link rel="shortcut icon" href="images/favicon.png">
     <link rel="apple-touch-icon" href="images/apple-touch-icon-57x57.png">
@@ -22,7 +21,6 @@
     <link rel="stylesheet" href="css/icon.min.css" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/responsive.css" />
-    <link rel="stylesheet" href="demos/wedding-invitation/wedding-invitation.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -451,8 +449,7 @@
             <div class="rounded-2xl bg-[#f7f5f0] p-0" style="max-width: 380px; width: 100%;">
                 <video id="conviteVideo" class="w-100 rounded-xl object-cover"
                     style="aspect-ratio: 9 / 16; max-height: 680px; object-fit: cover;"
-                    src="{{ asset('video/convite.mp4') }}" loop
-                    muted playsinline>
+                    src="{{ asset('video/convite.mp4') }}" loop muted playsinline>
                 </video>
             </div>
         </div>
@@ -573,10 +570,8 @@
 
                     <div class="d-flex flex-column align-items-center">
 
-                        <button type="button"
-                            class="btn btn-medium btn-dark-gray btn-box-shadow btn-round-edge"
-                            data-bs-toggle="modal"
-                            data-bs-target="#rsvpModal">
+                        <button type="button" class="btn btn-medium btn-dark-gray btn-box-shadow btn-round-edge"
+                            data-bs-toggle="modal" data-bs-target="#rsvpModal">
                             Confirmar Presença
                         </button>
 
@@ -615,50 +610,94 @@
                         </div>
                     </div>
 
-                    <form id="rsvpForm" novalidate>
+                    <form id="rsvpForm" method="POST" action="{{ route('invite.store') }}">
+                        @csrf
 
-                        <!-- STEP 1: name + contact -->
+                        <div class="rsvp-form-error">
+                            @if ($errors->any())
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        </div>
+
+                        {{-- STEP 1 --}}
                         <div class="rsvp-panel" data-panel="1">
                             <h6>Os seus dados</h6>
-                            <div class="rsvp-field" id="fieldName">
+
+                            <div class="rsvp-field">
                                 <label for="guestName">Nome completo *</label>
-                                <input type="text" id="guestName" placeholder="O seu nome" />
-                                <div class="field-error-msg">Por favor, indique o seu nome.</div>
+
+                                <input type="text" id="guestName" name="guest_name" placeholder="O seu nome"
+                                    value="{{ old('guest_name') }}" required>
                             </div>
 
-                            <div class="rsvp-field" id="fieldContact">
+                            <div class="rsvp-field">
                                 <label>Como prefere ser contactado? *</label>
+
                                 <div class="contact-toggle">
-                                    <button type="button" class="active" data-contact-type="email">Email</button>
-                                    <button type="button" data-contact-type="phone" >Telefone</button>
+                                    <button type="button" class="active" data-contact-type="email">
+                                        Email
+                                    </button>
+
+                                    <button type="button" data-contact-type="phone">
+                                        Telefone
+                                    </button>
                                 </div>
-                                <input type="text" id="contactValue" placeholder="exemplo@email.com" />
-                                <div class="field-error-msg">Indique um contacto válido.</div>
+
+                                <input type="text" id="contactValue" name="contact_value"
+                                    placeholder="exemplo@email.com" value="{{ old('contact_value') }}" required>
+
+                                <input type="hidden" name="contact_type" id="contactType" value="email">
                             </div>
                         </div>
 
-                        <!-- STEP 2: companions -->
+
+                        {{-- STEP 2 --}}
                         <div class="rsvp-panel" data-panel="2" hidden>
+
                             <h6>Vai levar acompanhantes?</h6>
-                            <div class="rsvp-field companions-count-field" id="fieldCompanionsCount">
-                                <label for="companionsCount">Número de acompanhantes</label>
-                                <input type="number" id="companionsCount" min="0" max="10"
-                                    value="0" />
+
+                            <div class="rsvp-field">
+                                <label for="companionsCount">
+                                    Número de acompanhantes
+                                </label>
+
+                                <input type="number" id="companionsCount" name="companions_count" min="0"
+                                    max="10" value="{{ old('companions_count', 0) }}">
                             </div>
+
                             <div id="companionsContainer"></div>
+
                         </div>
 
-                        <!-- STEP 3: allergies -->
+
+                        {{-- STEP 3 --}}
                         <div class="rsvp-panel" data-panel="3" hidden>
+
                             <h6>Alguma alergia ou restrição alimentar?</h6>
+
                             <div id="allergiesContainer"></div>
+
                         </div>
+
 
                         <div class="rsvp-actions">
-                            <button type="button" class="btn-back" id="btnBack" disabled>Voltar</button>
-                            <button type="button" class="btn-next" id="btnNext">Seguinte</button>
-                            <button type="submit" class="btn-submit" id="btnSubmit" hidden>Confirmar
-                                presença</button>
+
+                            <button type="button" class="btn-back" id="btnBack" disabled>
+                                Voltar
+                            </button>
+
+                            <button type="button" class="btn-next" id="btnNext">
+                                Seguinte
+                            </button>
+
+                            <button type="submit" class="btn-submit" id="btnSubmit" hidden>
+                                Confirmar presença
+                            </button>
+
                         </div>
                     </form>
 
@@ -816,7 +855,7 @@
         });
     </script>
     <script>
-        (function () {
+        (function() {
             const video = document.getElementById('conviteVideo');
             if (!video) return;
 

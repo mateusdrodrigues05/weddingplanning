@@ -4953,124 +4953,265 @@ function initMap() {
     });
 }
 
+//===== Modal Code ======
 (function () {
     let currentStep = 1;
+
     let contactType = "email";
+
     const totalSteps = 3;
 
-    // TODO: adjust this to match your actual Laravel route
-    // e.g. "/weddings/{{ $wedding->slug }}/rsvp" if this page is per-wedding
-    const RSVP_ENDPOINT = "/rsvp";
-
-    // Flip this to true once the controller/route exist. While false, the form
-    // still builds the payload (buildPayload) but just shows the success view
-    // locally instead of sending it anywhere — nothing is persisted yet.
-    const SEND_TO_BACKEND = false;
+    /*
+    |--------------------------------------------------------------------------
+    | ELEMENTS
+    |--------------------------------------------------------------------------
+    */
 
     const stepItems = document.querySelectorAll(".rsvp-step-item");
+
     const connectors = document.querySelectorAll(".rsvp-step-connector");
+
     const panels = document.querySelectorAll(".rsvp-panel");
+
     const btnBack = document.getElementById("btnBack");
+
     const btnNext = document.getElementById("btnNext");
+
     const btnSubmit = document.getElementById("btnSubmit");
+
     const form = document.getElementById("rsvpForm");
-    const successView = document.getElementById("rsvpSuccess");
+
     const contactInput = document.getElementById("contactValue");
+
+    const contactTypeInput = document.getElementById("contactType");
+
     const formErrorBanner = document.getElementById("rsvpFormError");
 
-    // ---------- contact type toggle ----------
-    document.querySelectorAll("[data-contact-type]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-            document
-                .querySelectorAll("[data-contact-type]")
-                .forEach((b) => b.classList.remove("active"));
-            btn.classList.add("active");
-            contactType = btn.dataset.contactType;
+    const companionsCountInput = document.getElementById("companionsCount");
+
+    const companionsContainer = document.getElementById("companionsContainer");
+
+    const allergiesContainer = document.getElementById("allergiesContainer");
+
+    /*
+    |--------------------------------------------------------------------------
+    | ERROR HELPERS
+    |--------------------------------------------------------------------------
+    */
+
+    function setError(fieldId) {
+        const field = document.getElementById(fieldId);
+
+        if (!field) {
+            return;
+        }
+
+        field.classList.add("field-error");
+    }
+
+    function clearError(fieldId) {
+        const field = document.getElementById(fieldId);
+
+        if (!field) {
+            return;
+        }
+
+        field.classList.remove("field-error");
+    }
+
+    function showFormError(message) {
+        if (!formErrorBanner) {
+            return;
+        }
+
+        formErrorBanner.textContent = message;
+
+        formErrorBanner.hidden = false;
+    }
+
+    function hideFormError() {
+        if (!formErrorBanner) {
+            return;
+        }
+
+        formErrorBanner.textContent = "";
+
+        formErrorBanner.hidden = true;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | CONTACT TYPE
+    |--------------------------------------------------------------------------
+    */
+
+    document.querySelectorAll("[data-contact-type]").forEach((button) => {
+        button.addEventListener("click", () => {
+            document.querySelectorAll("[data-contact-type]").forEach((item) => {
+                item.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+            contactType = button.dataset.contactType;
+
+            contactTypeInput.value = contactType;
 
             contactInput.value = "";
+
             clearError("fieldContact");
 
             if (contactType === "phone") {
                 contactInput.type = "tel";
+
                 contactInput.inputMode = "numeric";
+
                 contactInput.setAttribute("pattern", "[0-9]*");
+
                 contactInput.setAttribute("maxlength", "9");
+
                 contactInput.placeholder = "912345678";
             } else {
                 contactInput.type = "email";
+
                 contactInput.inputMode = "email";
+
                 contactInput.removeAttribute("pattern");
+
                 contactInput.removeAttribute("maxlength");
+
                 contactInput.placeholder = "exemplo@email.com";
             }
         });
     });
 
-    // digits-only, 9-char hard limit while typing on the phone field
+    /*
+    |--------------------------------------------------------------------------
+    | PHONE INPUT
+    |--------------------------------------------------------------------------
+    */
+
     contactInput.addEventListener("input", () => {
-        if (contactType !== "phone") return;
+        if (contactType !== "phone") {
+            return;
+        }
+
         contactInput.value = contactInput.value.replace(/\D/g, "").slice(0, 9);
     });
 
-    // ---------- helpers: errors ----------
-    function setError(fieldId) {
-        document.getElementById(fieldId).classList.add("field-error");
-    }
-    function clearError(fieldId) {
-        document.getElementById(fieldId).classList.remove("field-error");
-    }
+    /*
+    |--------------------------------------------------------------------------
+    | STEP INDICATOR
+    |--------------------------------------------------------------------------
+    */
 
-    // ---------- step navigation UI ----------
     function renderStepIndicator() {
         stepItems.forEach((item) => {
             const step = parseInt(item.dataset.step, 10);
+
             item.classList.remove("active", "completed", "error");
-            if (step < currentStep) item.classList.add("completed");
-            else if (step === currentStep) item.classList.add("active");
+
+            if (step < currentStep) {
+                item.classList.add("completed");
+            } else if (step === currentStep) {
+                item.classList.add("active");
+            }
         });
-        connectors.forEach((c, i) => {
-            c.classList.toggle("completed", i + 1 < currentStep);
+
+        connectors.forEach((connector, index) => {
+            connector.classList.toggle("completed", index + 1 < currentStep);
         });
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | SHOW PANEL
+    |--------------------------------------------------------------------------
+    */
+
     function showPanel(step) {
-        panels.forEach((p) => {
-            p.hidden = parseInt(p.dataset.panel, 10) !== step;
+        panels.forEach((panel) => {
+            const panelStep = parseInt(panel.dataset.panel, 10);
+
+            panel.hidden = panelStep !== step;
         });
+
         btnBack.disabled = step === 1;
+
         btnNext.hidden = step === totalSteps;
+
         btnSubmit.hidden = step !== totalSteps;
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | STEP ERROR
+    |--------------------------------------------------------------------------
+    */
 
     function flagStepError() {
         const item = document.querySelector(
             `.rsvp-step-item[data-step="${currentStep}"]`,
         );
+
+        if (!item) {
+            return;
+        }
+
         item.classList.add("error");
-        setTimeout(() => item.classList.remove("error"), 350);
+
+        setTimeout(() => {
+            item.classList.remove("error");
+        }, 350);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | GO TO STEP
+    |--------------------------------------------------------------------------
+    */
 
     function goToStep(step) {
         currentStep = step;
+
         renderStepIndicator();
+
         showPanel(step);
     }
 
-    // ---------- validation (client-side, mirrors what the controller checks) ----------
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDATE STEP 1
+    |--------------------------------------------------------------------------
+    */
+
     function validateStep1() {
         let valid = true;
+
         const name = document.getElementById("guestName").value.trim();
+
         const contact = contactInput.value.trim();
+
+        /*
+        | Name
+        */
 
         if (!name) {
             setError("fieldName");
+
             valid = false;
         } else {
             clearError("fieldName");
         }
 
+        /*
+        | Contact
+        */
+
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
         const phoneRegex = /^\d{9}$/;
+
         const contactOk =
             contactType === "email"
                 ? emailRegex.test(contact)
@@ -5078,6 +5219,7 @@ function initMap() {
 
         if (!contact || !contactOk) {
             setError("fieldContact");
+
             valid = false;
         } else {
             clearError("fieldContact");
@@ -5086,345 +5228,602 @@ function initMap() {
         return valid;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDATE STEP 2
+    |--------------------------------------------------------------------------
+    */
+
     function validateStep2() {
         let valid = true;
+
         document
             .querySelectorAll("#companionsContainer .companion-row")
             .forEach((row) => {
                 const nameInput = row.querySelector(".companion-name");
+
                 const fieldWrap = row.querySelector(".rsvp-field");
+
                 if (!nameInput.value.trim()) {
                     fieldWrap.classList.add("field-error");
+
                     valid = false;
                 } else {
                     fieldWrap.classList.remove("field-error");
                 }
             });
+
         return valid;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDATE STEP 3
+    |--------------------------------------------------------------------------
+    */
+
     function validateStep3() {
         let valid = true;
+
         document
             .querySelectorAll("#allergiesContainer .allergy-row")
             .forEach((row) => {
                 const checkbox = row.querySelector(".allergy-checkbox");
+
                 const textarea = row.querySelector(".allergy-textarea");
+
                 const wrap = row.querySelector(".allergy-desc");
+
                 if (checkbox.checked && !textarea.value.trim()) {
                     wrap.classList.add("field-error");
+
                     valid = false;
                 } else {
                     wrap.classList.remove("field-error");
                 }
             });
+
         return valid;
     }
 
-    // ---------- dynamic companions ----------
-    const companionsCountInput = document.getElementById("companionsCount");
-    const companionsContainer = document.getElementById("companionsContainer");
+    /*
+    |--------------------------------------------------------------------------
+    | COMPANIONS
+    |--------------------------------------------------------------------------
+    */
 
     function renderCompanionRows() {
         const count = Math.max(
             0,
             Math.min(10, parseInt(companionsCountInput.value, 10) || 0),
         );
+
+        companionsCountInput.value = count;
+
         const existing =
             companionsContainer.querySelectorAll(".companion-row").length;
+
+        /*
+        | Add rows
+        */
 
         if (count > existing) {
             for (let i = existing; i < count; i++) {
                 const row = document.createElement("div");
+
                 row.className = "companion-row";
+
                 row.innerHTML = `
-        <div class="companion-row-header">
-        <span class="companion-row-title">Acompanhante ${i + 1}</span>
-        <svg class="companion-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        </div>
-        <div class="companion-row-body">
-        <div class="rsvp-field">
-            <label>Nome *</label>
-            <input type="text" class="companion-name" placeholder="Nome do acompanhante" />
-            <div class="field-error-msg">Indique o nome do acompanhante.</div>
-        </div>
-        <div class="rsvp-field">
-            <label>Faixa etária</label>
-            <div class="age-bracket-toggle">
-            <button type="button" class="age-bracket-btn" data-age="under3">&lt; 3 anos</button>
-            <button type="button" class="age-bracket-btn" data-age="under12">&lt; 12 anos</button>
-            <button type="button" class="age-bracket-btn active" data-age="over12">12+ anos</button>
-            </div>
-            <input type="hidden" class="companion-age-bracket" value="over12" />
-        </div>
-        </div>`;
+
+                    <div class="companion-row-header">
+
+                        <span class="companion-row-title">
+                            Acompanhante ${i + 1}
+                        </span>
+
+                        <svg
+                            class="companion-chevron"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                        >
+                            <path
+                                d="M6 9l6 6 6-6"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+
+                    </div>
+
+
+                    <div class="companion-row-body">
+
+                        <div class="rsvp-field">
+
+                            <label>
+                                Nome *
+                            </label>
+
+                            <input
+                                type="text"
+                                class="companion-name"
+                                name="companions[${i}][name]"
+                                placeholder="Nome do acompanhante"
+                            >
+
+                            <div class="field-error-msg">
+                                Indique o nome do acompanhante.
+                            </div>
+
+                        </div>
+
+
+                        <div class="rsvp-field">
+
+                            <label>
+                                Faixa etária
+                            </label>
+
+
+                            <div class="age-bracket-toggle">
+
+                                <button
+                                    type="button"
+                                    class="age-bracket-btn"
+                                    data-age="under3"
+                                >
+                                    &lt; 3 anos
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="age-bracket-btn"
+                                    data-age="under12"
+                                >
+                                    &lt; 12 anos
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="age-bracket-btn active"
+                                    data-age="over12"
+                                >
+                                    12+ anos
+                                </button>
+
+                            </div>
+
+
+                            <input
+                                type="hidden"
+                                class="companion-age-bracket"
+                                name="companions[${i}][age_bracket]"
+                                value="over12"
+                            >
+
+                        </div>
+
+                    </div>
+
+                `;
+
                 companionsContainer.appendChild(row);
             }
         } else if (count < existing) {
+
+        /*
+        | Remove rows
+        */
             const rows = companionsContainer.querySelectorAll(".companion-row");
+
             for (let i = existing - 1; i >= count; i--) {
                 rows[i].remove();
             }
         }
 
+        /*
+        | Open first row
+        */
+
         const rows = companionsContainer.querySelectorAll(".companion-row");
-        rows.forEach((r, idx) => r.classList.toggle("open", idx === 0));
+
+        rows.forEach((row, index) => {
+            row.classList.toggle("open", index === 0);
+        });
     }
 
-    companionsContainer.addEventListener("click", (e) => {
-        const header = e.target.closest(".companion-row-header");
+    /*
+    |--------------------------------------------------------------------------
+    | COMPANION EVENTS
+    |--------------------------------------------------------------------------
+    */
+
+    companionsContainer.addEventListener("click", (event) => {
+        /*
+            | Header
+            */
+
+        const header = event.target.closest(".companion-row-header");
+
         if (header) {
             header.closest(".companion-row").classList.toggle("open");
+
             return;
         }
 
-        const btn = e.target.closest(".age-bracket-btn");
-        if (btn) {
-            const row = btn.closest(".companion-row");
-            row.querySelectorAll(".age-bracket-btn").forEach((b) =>
-                b.classList.remove("active"),
-            );
-            btn.classList.add("active");
-            row.querySelector(".companion-age-bracket").value = btn.dataset.age;
+        /*
+            | Age buttons
+            */
+
+        const ageButton = event.target.closest(".age-bracket-btn");
+
+        if (!ageButton) {
+            return;
         }
+
+        const row = ageButton.closest(".companion-row");
+
+        row.querySelectorAll(".age-bracket-btn").forEach((button) => {
+            button.classList.remove("active");
+        });
+
+        ageButton.classList.add("active");
+
+        row.querySelector(".companion-age-bracket").value =
+            ageButton.dataset.age;
     });
 
-    companionsContainer.addEventListener("input", (e) => {
-        if (!e.target.classList.contains("companion-name")) return;
-        const row = e.target.closest(".companion-row");
+    /*
+    |--------------------------------------------------------------------------
+    | COMPANION NAME
+    |--------------------------------------------------------------------------
+    */
+
+    companionsContainer.addEventListener("input", (event) => {
+        if (!event.target.classList.contains("companion-name")) {
+            return;
+        }
+
+        const row = event.target.closest(".companion-row");
+
         const title = row.querySelector(".companion-row-title");
-        const idx = Array.from(companionsContainer.children).indexOf(row) + 1;
-        title.textContent = e.target.value.trim() || `Acompanhante ${idx}`;
+
+        const rows = Array.from(companionsContainer.children);
+
+        const index = rows.indexOf(row) + 1;
+
+        title.textContent =
+            event.target.value.trim() || `Acompanhante ${index}`;
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | COMPANION COUNT
+    |--------------------------------------------------------------------------
+    */
 
     companionsCountInput.addEventListener("input", renderCompanionRows);
 
-    // ---------- dynamic allergies (built from step 1 + step 2 names) ----------
-    const allergiesContainer = document.getElementById("allergiesContainer");
+    /*
+    |--------------------------------------------------------------------------
+    | ALLERGIES
+    |--------------------------------------------------------------------------
+    */
 
     function renderAllergyRows() {
-        const names = [
-            document.getElementById("guestName").value.trim() ||
-                "Convidado principal",
-        ];
+        const guestNameInput = document.getElementById("guestName");
+
+        const names = [];
+
+        const guestName = guestNameInput.value.trim();
+
+        names.push(guestName || "Convidado principal");
+
         document.querySelectorAll(".companion-name").forEach((input) => {
-            if (input.value.trim()) names.push(input.value.trim());
+            const name = input.value.trim();
+
+            if (name) {
+                names.push(name);
+            }
         });
 
+        /*
+        | Clear current rows
+        */
+
         allergiesContainer.innerHTML = "";
-        names.forEach((name) => {
+
+        /*
+        | Create rows
+        */
+
+        names.forEach((name, index) => {
             const row = document.createElement("div");
+
             row.className = "allergy-row";
+
+            /*
+            | IMPORTANT:
+            | Don't insert user input directly
+            | into innerHTML.
+            */
+
             row.innerHTML = `
-        <div class="allergy-guest-name">${name}</div>
-        <label class="allergy-check">
-        <input type="checkbox" class="allergy-checkbox" />
-        Tem alergia ou restrição alimentar
-        </label>
-        <div class="rsvp-field allergy-desc">
-        <label>Descreva</label>
-        <textarea class="allergy-textarea" rows="2" placeholder="Ex: alergia a marisco, intolerância a lactose..."></textarea>
-        <div class="field-error-msg">Descreva a alergia ou restrição.</div>
-        </div>`;
+
+                <div class="allergy-guest-name"></div>
+
+
+                <label class="allergy-check">
+
+                    <input
+                        type="hidden"
+                        name="allergies[${index}][has_allergy]"
+                        value="0"
+                    >
+
+                    <input
+                        type="checkbox"
+                        class="allergy-checkbox"
+                        name="allergies[${index}][has_allergy]"
+                        value="1"
+                    >
+
+                    Tem alergia ou restrição alimentar
+
+                </label>
+
+
+                <input
+                    type="hidden"
+                    class="allergy-guest-name-input"
+                    name="allergies[${index}][guest_name]"
+                >
+
+
+                <div class="rsvp-field allergy-desc">
+
+                    <label>
+                        Descreva
+                    </label>
+
+                    <textarea
+                        class="allergy-textarea"
+                        name="allergies[${index}][description]"
+                        rows="2"
+                        placeholder="Ex: alergia a marisco, intolerância a lactose..."
+                    ></textarea>
+
+                    <div class="field-error-msg">
+                        Descreva a alergia ou restrição.
+                    </div>
+
+                </div>
+
+            `;
+
+            /*
+            | Set user text safely
+            */
+
+            row.querySelector(".allergy-guest-name").textContent = name;
+
+            row.querySelector(".allergy-guest-name-input").value = name;
+
             allergiesContainer.appendChild(row);
 
+            /*
+            | Checkbox
+            */
+
             const checkbox = row.querySelector(".allergy-checkbox");
-            const descWrap = row.querySelector(".allergy-desc");
+
+            const description = row.querySelector(".allergy-desc");
+
             checkbox.addEventListener("change", () => {
-                descWrap.classList.toggle("show", checkbox.checked);
-                if (!checkbox.checked) descWrap.classList.remove("field-error");
+                description.classList.toggle("show", checkbox.checked);
+
+                if (!checkbox.checked) {
+                    description.classList.remove("field-error");
+                }
             });
         });
     }
 
-    // ---------- navigation buttons ----------
+    /*
+    |--------------------------------------------------------------------------
+    | NEXT BUTTON
+    |--------------------------------------------------------------------------
+    */
+
     btnNext.addEventListener("click", () => {
         let valid = true;
-        if (currentStep === 1) valid = validateStep1();
-        if (currentStep === 2) valid = validateStep2();
+
+        if (currentStep === 1) {
+            valid = validateStep1();
+        }
+
+        if (currentStep === 2) {
+            valid = validateStep2();
+        }
 
         if (!valid) {
             flagStepError();
+
             return;
         }
 
-        if (currentStep === 2) renderAllergyRows();
+        /*
+            | Before entering Step 3,
+            | generate allergy fields.
+            */
+
+        if (currentStep === 2) {
+            renderAllergyRows();
+        }
 
         goToStep(Math.min(totalSteps, currentStep + 1));
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | BACK BUTTON
+    |--------------------------------------------------------------------------
+    */
 
     btnBack.addEventListener("click", () => {
         goToStep(Math.max(1, currentStep - 1));
     });
 
-    // ---------- build payload ----------
-    function buildPayload() {
-        const companions = Array.from(
-            companionsContainer.querySelectorAll(".companion-row"),
-        ).map((row) => ({
-            name: row.querySelector(".companion-name").value.trim(),
-            age_bracket: row.querySelector(".companion-age-bracket").value,
-        }));
+    /*
+    |--------------------------------------------------------------------------
+    | FORM SUBMIT
+    |--------------------------------------------------------------------------
+    |
+    | IMPORTANT:
+    |
+    | There is NO preventDefault().
+    |
+    | Therefore the browser will perform:
+    |
+    | POST /invite
+    |
+    | and Laravel will receive the data.
+    |
+    */
 
-        const allergies = Array.from(
-            allergiesContainer.querySelectorAll(".allergy-row"),
-        ).map((row) => ({
-            guest_name: row.querySelector(".allergy-guest-name").textContent.trim(),
-            has_allergy: row.querySelector(".allergy-checkbox").checked,
-            description: row.querySelector(".allergy-textarea").value.trim(),
-        }));
-
-        return {
-            guest: {
-                name: document.getElementById("guestName").value.trim(),
-                contact_type: contactType,
-                contact_value: contactInput.value.trim(),
-            },
-            companions,
-            allergies,
-        };
-    }
-
-    // ---------- error banner ----------
-    function showFormError(message) {
-        if (!formErrorBanner) return;
-        formErrorBanner.textContent = message;
-        formErrorBanner.hidden = false;
-    }
-    function hideFormError() {
-        if (!formErrorBanner) return;
-        formErrorBanner.hidden = true;
-        formErrorBanner.textContent = "";
-    }
-
-    // maps backend validation error keys (Laravel dot-notation) to a step + DOM highlight
-    function applyServerErrors(errors) {
-        let firstStepWithError = null;
-
-        Object.keys(errors).forEach((key) => {
-            if (key.startsWith("guest.name")) {
-                setError("fieldName");
-                firstStepWithError = firstStepWithError || 1;
-            } else if (key.startsWith("guest.contact_value") || key.startsWith("guest.contact_type")) {
-                setError("fieldContact");
-                firstStepWithError = firstStepWithError || 1;
-            } else if (key.startsWith("companions.")) {
-                const idx = parseInt(key.split(".")[1], 10);
-                const row = companionsContainer.querySelectorAll(".companion-row")[idx];
-                if (row) row.querySelector(".rsvp-field").classList.add("field-error");
-                firstStepWithError = firstStepWithError || 2;
-            } else if (key.startsWith("allergies.")) {
-                const idx = parseInt(key.split(".")[1], 10);
-                const row = allergiesContainer.querySelectorAll(".allergy-row")[idx];
-                if (row) row.querySelector(".allergy-desc").classList.add("field-error");
-                firstStepWithError = firstStepWithError || 3;
-            }
-        });
-
-        if (firstStepWithError) goToStep(firstStepWithError);
-
-        const messages = Object.values(errors).flat();
-        showFormError(messages[0] || "Verifique os dados introduzidos e tente novamente.");
-    }
-
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+    form.addEventListener("submit", (event) => {
         hideFormError();
 
+        /*
+            | Validate Step 3
+            */
+
         if (!validateStep3()) {
+            event.preventDefault();
+
             flagStepError();
+
             return;
         }
 
-        const payload = buildPayload();
-
-        // Not wired to a controller yet — just show success locally.
-        // Everything above (payload shape, error banner, applyServerErrors,
-        // step-jumping) is already built for when SEND_TO_BACKEND flips to true.
-        if (!SEND_TO_BACKEND) {
-            showSuccess();
-            return;
-        }
-
-        btnSubmit.disabled = true;
-        btnSubmit.textContent = "A enviar...";
-
-        try {
-            const csrfToken = document
-                .querySelector('meta[name="csrf-token"]')
-                ?.getAttribute("content");
-
-            const response = await fetch(RSVP_ENDPOINT, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                    "X-CSRF-TOKEN": csrfToken || "",
-                    "X-Requested-With": "XMLHttpRequest",
-                },
-                body: JSON.stringify(payload),
-            });
-
-            if (response.status === 422) {
-                const data = await response.json();
-                applyServerErrors(data.errors || {});
-                return;
-            }
-
-            if (!response.ok) {
-                showFormError("Não foi possível confirmar a sua presença. Tente novamente.");
-                return;
-            }
-
-            showSuccess();
-        } catch (err) {
-            showFormError("Erro de ligação. Verifique a sua internet e tente novamente.");
-        } finally {
-            btnSubmit.disabled = false;
-            btnSubmit.textContent = "Confirmar presença";
-        }
+        /*
+            | DO NOTHING ELSE.
+            |
+            | Browser submits the form normally.
+            */
     });
 
-    function showSuccess() {
-        document
-            .querySelector('.rsvp-step-item[data-step="3"]')
-            .classList.add("completed");
+    /*
+    |--------------------------------------------------------------------------
+    | MODAL RESET
+    |--------------------------------------------------------------------------
+    */
 
-        form.hidden = true;
-        document.getElementById("rsvpStepsNav").hidden = true;
-        successView.hidden = false;
-    }
+    const modal = document.getElementById("rsvpModal");
 
-    // reset modal state whenever it's closed, so reopening starts fresh
-    document
-        .getElementById("rsvpModal")
-        .addEventListener("hidden.bs.modal", () => {
+    if (modal) {
+        modal.addEventListener("hidden.bs.modal", () => {
             currentStep = 1;
+
             form.reset();
+
             form.hidden = false;
-            document.getElementById("rsvpStepsNav").hidden = false;
-            successView.hidden = true;
+
+            /*
+                | Reset success
+                */
+
+            const successView = document.getElementById("rsvpSuccess");
+
+            if (successView) {
+                successView.hidden = true;
+            }
+
+            /*
+                | Reset steps navigation
+                */
+
+            const stepsNav = document.getElementById("rsvpStepsNav");
+
+            if (stepsNav) {
+                stepsNav.hidden = false;
+            }
+
+            /*
+                | Reset dynamic content
+                */
+
             companionsContainer.innerHTML = "";
+
             allergiesContainer.innerHTML = "";
+
+            /*
+                | Reset error
+                */
+
             hideFormError();
+
+            /*
+                | Reset contact
+                */
+
             document
                 .querySelectorAll("[data-contact-type]")
-                .forEach((b) => b.classList.remove("active"));
-            document
-                .querySelector('[data-contact-type="email"]')
-                .classList.add("active");
+                .forEach((button) => {
+                    button.classList.remove("active");
+                });
+
+            const emailButton = document.querySelector(
+                '[data-contact-type="email"]',
+            );
+
+            if (emailButton) {
+                emailButton.classList.add("active");
+            }
+
             contactType = "email";
+
+            contactTypeInput.value = "email";
+
             contactInput.type = "email";
+
+            contactInput.inputMode = "email";
+
             contactInput.removeAttribute("maxlength");
+
             contactInput.removeAttribute("pattern");
+
+            contactInput.placeholder = "exemplo@email.com";
+
+            /*
+                | Reset errors
+                */
+
             ["fieldName", "fieldContact"].forEach(clearError);
+
+            /*
+                | Reset navigation
+                */
+
             renderStepIndicator();
+
             showPanel(1);
         });
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | INITIALIZE
+    |--------------------------------------------------------------------------
+    */
 
     renderStepIndicator();
+
     showPanel(1);
 })();
-

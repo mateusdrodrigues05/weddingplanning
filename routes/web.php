@@ -20,3 +20,4 @@ Route::delete('/guests/{id}', [GuestController::class, 'delete'])->name('guests.
 
 //Invite Routes
 Route::get('/invite', [InviteController::class, 'index'])->name('invite');
+Route::post('/invite', [InviteController::class, 'store'])->name('invite.store');

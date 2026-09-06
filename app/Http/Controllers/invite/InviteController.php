@@ -11,12 +11,12 @@ use App\Models\Companion;
 class InviteController extends Controller
 {
 
-    public function index( Guest $guest)
-    {
-        return view('invite.invite', [
-            'guest' => $guest,
-        ]);
-    }
+    // public function index( Guest $guest)
+    // {
+    //     return view('invite.invite', [
+    //         'guest' => $guest,
+    //     ]);
+    // }
 
     public function store(Request $request, Guest $guest)
     {
@@ -60,10 +60,17 @@ class InviteController extends Controller
             ]);
         }
         
-        return response()->json([
-            'success' => true,
-            'message' => 'Convite confirmado com sucesso.',
-        ]);
+        return redirect()->route('invite.show', $guest);
+    }
+
+    public function show(Guest $guest)
+    {
+        return match ($guest->rsvp_status) {
+            'pending'   => view('invite.invite', ['guest' => $guest]),
+            'confirmed' => view('invite.confirmed', ['guest' => $guest]),
+            'declined'  => view('invite.declined', ['guest' => $guest]),
+            default     => abort(404),
+        };
     }
 
 }

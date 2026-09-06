@@ -171,7 +171,7 @@
                             <i class="fa-regular fa-pen-to-square"></i>
                         </a>
 
-                        <button type="button" class="icon-btn copy-invite-link" title="Copiar Link" data-link="{{ route('invite.index', $guest->rsvp_token) }}">
+                        <button type="button" class="icon-btn copy-invite-link" title="Copiar Link" data-link="{{ route('invite.show', $guest->rsvp_token) }}">
                             <i class="fa-solid fa-link"></i>
                         </button>
                         

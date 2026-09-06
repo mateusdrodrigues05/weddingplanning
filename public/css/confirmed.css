@@ -1,0 +1,181 @@
+/* confirmed.css - scoped under .wp-confirmed-page */
+
+.wp-confirmed-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: linear-gradient(180deg, #f7f5f0 0%, #ece7dd 100%);
+    font-family: 'Manrope', sans-serif;
+}
+
+.wp-confirmed-card {
+    max-width: 520px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 48px 36px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(122, 139, 111, 0.15);
+    border: 1px solid #e4e0d6;
+}
+
+.wp-confirmed-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: #7a8b6f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wp-confirmed-icon i {
+    color: #fff;
+    font-size: 24px;
+}
+
+.wp-confirmed-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 34px;
+    font-weight: 600;
+    color: #4a4a3f;
+    margin-bottom: 8px !important;
+}
+
+.wp-confirmed-subtitle {
+    font-size: 15px;
+    color: #8a8a7a;
+    margin-bottom: 24px !important;
+}
+
+.wp-confirmed-names {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-style: italic;
+    color: #7a8b6f;
+    margin-bottom: 20px;
+}
+
+.wp-confirmed-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.wp-confirmed-divider span {
+    width: 40px;
+    height: 1px;
+    background: #d3ccb8;
+}
+
+.wp-confirmed-divider i {
+    color: #c9a86a;
+    font-size: 14px;
+}
+
+.wp-confirmed-details {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    text-align: left;
+    margin-bottom: 28px;
+}
+
+.wp-detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #f7f5f0;
+    padding: 14px 16px;
+    border-radius: 10px;
+}
+
+.wp-detail-icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background: #eae5d8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a0784f;
+}
+
+.wp-detail-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.wp-detail-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #a0a08f;
+    font-weight: 600;
+}
+
+.wp-detail-value {
+    font-size: 15px;
+    color: #4a4a3f;
+    font-weight: 600;
+}
+
+.wp-detail-subvalue {
+    font-size: 13px;
+    color: #8a8a7a;
+}
+
+.wp-confirmed-guests {
+    background: #eef1e9;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.wp-confirmed-guest-names {
+    font-size: 15px;
+    color: #4a4a3f;
+    margin: 4px 0 0 !important;
+    font-weight: 500;
+}
+
+.wp-confirmed-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #7a8b6f;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 13px 28px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.wp-confirmed-btn:hover {
+    background: #667a5c;
+}
+
+.wp-confirmed-footer {
+    font-size: 12px;
+    color: #a0a08f;
+    margin-top: 24px !important;
+}
+
+@media (max-width: 480px) {
+    .wp-confirmed-card {
+        padding: 32px 22px;
+    }
+    .wp-confirmed-title {
+        font-size: 28px;
+    }
+}

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Guest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 
 class GuestController extends Controller
 {
@@ -51,6 +52,7 @@ class GuestController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'rsvp_token' => Str::random(32),
             'rsvp_status' => 'pending',
         ]);
 
@@ -68,6 +70,13 @@ class GuestController extends Controller
         $guest->delete();
 
         return response()->json(['success' => true]);
+    }
+
+    public function getTokenGuest($id)
+    {
+        $guest = Guest::find($id);
+
+        dd($guest->rsvp_token);
     }
 
     

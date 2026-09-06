@@ -13,11 +13,13 @@ class Companion extends Model
         'guest_id',
         'name',
         'age',
+        'has_allergies',
+        'allergies'
     ];
 
-    protected $casts = [
-        'age' => 'integer',
-    ];
+    // protected $casts = [
+    //     'age' => 'integer',
+    // ];
 
     /**
      * The guest this companion belongs to.

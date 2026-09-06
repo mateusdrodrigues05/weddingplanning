@@ -14,7 +14,9 @@ class Guest extends Model
         'name',
         'email',
         'phone',
+        'rsvb_token',
         'rsvp_status',
+        'allergies',
     ];
 
     protected $casts = [
@@ -34,5 +36,10 @@ class Guest extends Model
     public function companions()
     {
         return $this->hasMany(Companion::class);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'rsvp_token';
     }
 }

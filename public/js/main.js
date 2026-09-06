@@ -5416,8 +5416,7 @@ function initMap() {
                 companionsContainer.appendChild(row);
             }
         } else if (count < existing) {
-
-        /*
+            /*
         | Remove rows
         */
             const rows = companionsContainer.querySelectorAll(".companion-row");
@@ -5534,14 +5533,14 @@ function initMap() {
         });
 
         /*
-        | Clear current rows
-        */
+    | Clear current rows
+    */
 
         allergiesContainer.innerHTML = "";
 
         /*
-        | Create rows
-        */
+    | Create rows
+    */
 
         names.forEach((name, index) => {
             const row = document.createElement("div");
@@ -5549,77 +5548,83 @@ function initMap() {
             row.className = "allergy-row";
 
             /*
-            | IMPORTANT:
-            | Don't insert user input directly
-            | into innerHTML.
-            */
+        | index 0 = main guest -> flat field names
+        | index 1+ = companion -> nested under companions[index-1]
+        */
+
+            const isGuest = index === 0;
+
+            const hasAllergyName = isGuest
+                ? "guest_has_allergy"
+                : `companions[${index - 1}][has_allergy]`;
+
+            const descriptionName = isGuest
+                ? "guest_allergy_description"
+                : `companions[${index - 1}][description]`;
+
+            /*
+        | IMPORTANT:
+        | Don't insert user input directly
+        | into innerHTML.
+        */
 
             row.innerHTML = `
 
-                <div class="allergy-guest-name"></div>
+            <div class="allergy-guest-name"></div>
 
 
-                <label class="allergy-check">
-
-                    <input
-                        type="hidden"
-                        name="allergies[${index}][has_allergy]"
-                        value="0"
-                    >
-
-                    <input
-                        type="checkbox"
-                        class="allergy-checkbox"
-                        name="allergies[${index}][has_allergy]"
-                        value="1"
-                    >
-
-                    Tem alergia ou restrição alimentar
-
-                </label>
-
+            <label class="allergy-check">
 
                 <input
                     type="hidden"
-                    class="allergy-guest-name-input"
-                    name="allergies[${index}][guest_name]"
+                    name="${hasAllergyName}"
+                    value="0"
                 >
 
+                <input
+                    type="checkbox"
+                    class="allergy-checkbox"
+                    name="${hasAllergyName}"
+                    value="1"
+                >
 
-                <div class="rsvp-field allergy-desc">
+                Tem alergia ou restrição alimentar
 
-                    <label>
-                        Descreva
-                    </label>
+            </label>
 
-                    <textarea
-                        class="allergy-textarea"
-                        name="allergies[${index}][description]"
-                        rows="2"
-                        placeholder="Ex: alergia a marisco, intolerância a lactose..."
-                    ></textarea>
 
-                    <div class="field-error-msg">
-                        Descreva a alergia ou restrição.
-                    </div>
+            <div class="rsvp-field allergy-desc">
 
+                <label>
+                    Descreva
+                </label>
+
+                <textarea
+                    class="allergy-textarea"
+                    name="${descriptionName}"
+                    rows="2"
+                    placeholder="Ex: alergia a marisco, intolerância a lactose..."
+                ></textarea>
+
+                <div class="field-error-msg">
+                    Descreva a alergia ou restrição.
                 </div>
 
-            `;
+            </div>
+
+        `;
 
             /*
-            | Set user text safely
-            */
+        | Set user text safely
+        */
 
             row.querySelector(".allergy-guest-name").textContent = name;
-
-            row.querySelector(".allergy-guest-name-input").value = name;
 
             allergiesContainer.appendChild(row);
 
             /*
-            | Checkbox
-            */
+        | Checkbox
+        */
 
             const checkbox = row.querySelector(".allergy-checkbox");
 
@@ -5697,26 +5702,56 @@ function initMap() {
     |
     */
 
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
         hideFormError();
 
-        /*
-            | Validate Step 3
-            */
-
         if (!validateStep3()) {
-            event.preventDefault();
-
             flagStepError();
-
             return;
         }
 
-        /*
-            | DO NOTHING ELSE.
-            |
-            | Browser submits the form normally.
-            */
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(form.action, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                },
+                body: formData,
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                showFormError(
+                    data.message || "Ocorreu um erro. Tente novamente.",
+                );
+                return;
+            }
+
+            /*
+        | Success — hide form, show success view
+        */
+
+            form.hidden = true;
+
+            const stepsNav = document.getElementById("rsvpStepsNav");
+
+            if (stepsNav) {
+                stepsNav.hidden = true;
+            }
+
+            const successView = document.getElementById("rsvpSuccess");
+
+            if (successView) {
+                successView.hidden = false;
+            }
+        } catch (error) {
+            showFormError("Ocorreu um erro de rede. Tente novamente.");
+        }
     });
 
     /*

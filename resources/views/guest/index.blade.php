@@ -170,12 +170,14 @@
                         <a href="{{ route('guest.show', $guest->id) }}" class="icon-btn" title="Editar">
                             <i class="fa-regular fa-pen-to-square"></i>
                         </a>
-                        <div class="icon-btn" title="Copiar link">
+
+                        <button type="button" class="icon-btn copy-invite-link" title="Copiar Link" data-link="{{ route('invite.index', $guest->rsvp_token) }}">
                             <i class="fa-solid fa-link"></i>
-                        </div>
-                        <button class="icon-btn" title="Remover"
-                            onclick="openDeleteModal({{ $guest->id }}, '{{ $guest->name }}')"><i
-                                class="fa-solid fa-xmark"></i></button>
+                        </button>
+                        
+                        <button class="icon-btn" title="Remover" onclick="openDeleteModal({{ $guest->id }}, '{{ $guest->name }}')">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
 
                     </div>
                 </div>
@@ -366,5 +368,60 @@
                 Livewire.dispatch('guest-created');
             @endif
         });
+
+        // ======= Copy Link To Invite =======
+        document.addEventListener('click', function (e) {
+            console.log("Script included");
+            const btn = e.target.closest('.copy-invite-link');
+            if (!btn) return;
+
+            const link = btn.dataset.link;
+
+            if (!link) {
+                alert('Link não encontrado.');
+                return;
+            }
+
+            copyToClipboard(link, btn);
+        });
+
+        function copyToClipboard(text, btn) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => showSuccess(btn)).catch(() => fallbackCopy(text, btn));
+            } else {
+                fallbackCopy(text, btn);
+            }
+        }
+
+        function fallbackCopy(text, btn) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+
+            try {
+                document.execCommand('copy');
+                showSuccess(btn);
+            } catch (err) {
+                alert('Não foi possível copiar o link.');
+            }
+
+            document.body.removeChild(textarea);
+        }
+
+        function showSuccess(btn) {
+            const icon = btn.querySelector('i');
+            icon.classList.remove('fa-link');
+            icon.classList.add('fa-check');
+
+            setTimeout(() => {
+                icon.classList.remove('fa-check');
+                icon.classList.add('fa-link');
+            }, 1500);
+        }
+
+
     </script>
 @endsection

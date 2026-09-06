@@ -8,29 +8,32 @@
     <meta name="author" content="ThemeZaa">
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="description" content="Vem festejar este dia tão importante connosco">
-    <!-- favicon icon -->
-    <link rel="shortcut icon" href="images/favicon.png">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-    <!-- google fonts preconnect -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- style sheets and font icons  -->
-    <link rel="stylesheet" href="css/vendors.min.css" />
-    <link rel="stylesheet" href="css/icon.min.css" />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/responsive.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="{{ asset('css/vendors.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/icon.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/responsive.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body data-mobile-nav-style="classic">
+
+
+    @if (session('success'))
+        <div class="rsvp-success-banner">
+            {{ session('success') }}
+        </div>
+    @endif
+
+
+
     <!-- start banner slider -->
     <section id="home" class="pb-0 full-screen md-h-600px sm-h-650px position-relative top-space-padding"
         data-parallax-background-ratio="0.3"
-        style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('img/couple4.jpg') }}'); color: white;">
+        style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ asset('img/fotoDavidMargarida.png') }}'); color: white;">
         <div class="container h-100 position-relative xs-p-0">
             <div class="row align-items-center h-100 justify-content-center"
                 data-anime='{ "el": "childs", "translateY": [0, 0], "scale": [0.7, 1], "opacity": [0,1], "duration": 300, "delay": 500, "staggervalue": 150, "easing": "easeOutQuad" }'>
@@ -442,20 +445,25 @@
     </section>
     <!-- end section --> --}}
     <!-- start section-->
-
-
     <section class="m-0 pt-0 pb-10">
-        <div class="d-flex justify-content-center">
-            <div class="rounded-2xl bg-[#f7f5f0] p-0" style="max-width: 380px; width: 100%;">
-                <video id="conviteVideo" class="w-100 rounded-xl object-cover"
-                    style="aspect-ratio: 9 / 16; max-height: 680px; object-fit: cover;"
-                    src="{{ asset('video/convite.mp4') }}" loop muted playsinline>
+        <div class="d-flex flex-column align-items-center text-center">
+
+            <p class="wp-invite-text">
+                Há dias que queremos guardar para sempre. <br>
+                <span class="wp-invite-highlight">E este queremos vivê-lo junto de quem faz parte da nossa
+                    história.</span>
+                <br>
+                É com muita alegria que vos convidamos a celebrar connosco.
+            </p>
+
+            <div class="wp-invite-video-wrap mt-5">
+                <video id="conviteVideo" class="wp-invite-video" loop muted playsinline
+                    src="{{ asset('video/VideoInvite.mp4') }}">
                 </video>
             </div>
+
         </div>
     </section>
-    <!-- end section-->
-
     <!-- start section -->
     <section id="when" class="bg-very-light-gray position-relative mb-0">
         <div class="position-absolute left-0px top-minus-50px lg-top-minus-25px sm-top-minus-20px xs-top-minus-15px background-position-left-top w-100 h-100px lg-h-60px md-h-50px background-size-100 background-no-repeat"
@@ -521,7 +529,7 @@
                                 <div
                                     class="text-dark-gray d-flex align-items-center border-top border-color-extra-medium-gray mt-20px pt-20px">
                                     <i class="fa-solid fa-clock "></i>
-                                    <span class="fs-15 text-uppercase ms-2">11:00</span>
+                                    <span class="fs-15 text-uppercase ms-2">12:00</span>
                                 </div>
                             </div>
                         </div>
@@ -543,11 +551,11 @@
                                 <i class="fa-solid fa-champagne-glasses fa-2x"></i>
                                 <div class="text-dark-gray mb-5px fs-19 fw-600">A festa após a cerimónia</div>
                                 <p class="lh-28">Quinta dos Magalhães em Beringel</p>
-                                <div
+                                {{-- <div
                                     class="text-dark-gray d-flex align-items-center border-top border-color-extra-medium-gray mt-20px pt-20px">
                                     <i class="fa-solid fa-clock"></i>
                                     <span class="fs-15 text-uppercase ms-2">15:00</span>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -610,7 +618,7 @@
                         </div>
                     </div>
 
-                    <form id="rsvpForm" method="POST" action="{{ route('invite.store') }}">
+                    <form id="rsvpForm" method="POST" action="{{ route('invite.store', $guest->rsvp_token) }}">
                         @csrf
 
                         <div class="rsvp-form-error">
@@ -843,9 +851,9 @@
     </div>
     <!-- end scroll progress -->
     <!-- javascript libraries -->
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/vendors.min.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/vendors.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
     <script>
         if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';

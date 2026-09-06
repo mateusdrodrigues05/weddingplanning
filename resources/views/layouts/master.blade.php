@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    
     
 
     <!-- Ou, se não usares Vite e tiveres o CSS diretamente em public/css -->

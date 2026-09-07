@@ -1,8 +1,8 @@
-<link rel="stylesheet" href="/css/confirmed.css">
+<link rel="stylesheet" href="{{ asset('css/confirmed.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <!-- confirmed.blade.php -->
 <div class="wp-confirmed-page">
-    <div class="wp-confirmed-card">
+    <div class="wp-confirmed-card" id="rsvpSuccess">
 
         <div class="wp-confirmed-icon">
             <i class="fa-solid fa-heart"></i>

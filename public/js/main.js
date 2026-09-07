@@ -5736,18 +5736,9 @@ function initMap() {
         | Success — hide form, show success view
         */
 
-            form.hidden = true;
-
-            const stepsNav = document.getElementById("rsvpStepsNav");
-
-            if (stepsNav) {
-                stepsNav.hidden = true;
-            }
-
-            const successView = document.getElementById("rsvpSuccess");
-
-            if (successView) {
-                successView.hidden = false;
+           if (data.redirect) {
+                window.location.href = data.redirect;
+                return;
             }
         } catch (error) {
             showFormError("Ocorreu um erro de rede. Tente novamente.");

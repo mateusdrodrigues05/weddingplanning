@@ -1,5 +1,5 @@
 <!-- pending.blade.php -->
-<link rel="stylesheet" href="/css/declined.css">
+<link rel="stylesheet" href="{{ asset('css/declined.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <div class="wp-pending-page">
@@ -11,7 +11,7 @@
 
         <h1 class="wp-pending-title">Ainda não respondeste ao nosso convite</h1>
         <p class="wp-pending-subtitle">
-            Se foi esquecimento, sem problema! Contacta os noivos para confirmares a tua presença.
+            Contacta os noivos para confirmares a tua presença.
         </p>
 
         <div class="wp-pending-names">
@@ -24,14 +24,14 @@
             <span></span>
         </div>
 
-        <div class="wp-pending-message">
+        {{-- <div class="wp-pending-message">
             <p>
                 O teu lugar está reservado, mas ainda não temos a tua confirmação.
             </p>
-        </div>
+        </div> --}}
 
         <div class="wp-pending-guest">
-            <span class="wp-detail-label">Convite para</span>
+            <span class="wp-detail-label">Convite de</span>
             <p class="wp-pending-guest-name">{{ $guest->name }}</p>
         </div>
 

@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Guest;
 use App\Models\Companion;
 
+use function PHPUnit\Framework\isEmpty;
+
 class InviteController extends Controller
 {
 
@@ -31,6 +33,7 @@ class InviteController extends Controller
         ]);
 
         $data = $request->all();
+        $companions = $data['companions'] ?? [];
         //$companions = $data['companions'] ?? [];
         //$allergies = $data['allergies'] ?? [];
 
@@ -49,18 +52,24 @@ class InviteController extends Controller
 
         $guest->companions()->delete();
 
-        //Update Companions Data
-        foreach($data['companions'] as $companion){
-            Companion::create([
-                'guest_id' => $guest->id,
-                'name' => $companion['name'],
-                'age' => $companion['age_bracket'],
-                'has_allergies' => $companion['has_allergy'] ?? false,
-                'allergies' => $companion['description'] ?? null,
-            ]);
-        }
         
-        return redirect()->route('invite.show', $guest);
+
+            //Update Companions Data
+            foreach($companions as $companion){
+                Companion::create([
+                    'guest_id' => $guest->id,
+                    'name' => $companion['name'],
+                    'age' => $companion['age_bracket'],
+                    'has_allergies' => $companion['has_allergy'] ?? false,
+                    'allergies' => $companion['description'] ?? null,
+                ]);
+            }
+        
+        
+        return response()->json([
+            'success' => true,
+            'redirect' => route('invite.confirmed', $guest->rsvp_token),
+        ]);
     }
 
     public function show(Guest $guest)
@@ -71,6 +80,11 @@ class InviteController extends Controller
             'declined'  => view('invite.declined', ['guest' => $guest]),
             default     => abort(404),
         };
+    }
+
+    public function confirmed(Guest $guest)
+    {
+        return view('invite.confirmed', ['guest' => $guest]);
     }
 
 }

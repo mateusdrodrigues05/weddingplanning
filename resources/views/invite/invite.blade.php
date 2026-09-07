@@ -621,7 +621,7 @@
                     <form id="rsvpForm" method="POST" action="{{ route('invite.store', $guest->rsvp_token) }}">
                         @csrf
 
-                        <div class="rsvp-form-error">
+                        <div class="rsvp-form-error" id="rsvpFormError" hidden>
                             @if ($errors->any())
                                 <ul>
                                     @foreach ($errors->all() as $error)

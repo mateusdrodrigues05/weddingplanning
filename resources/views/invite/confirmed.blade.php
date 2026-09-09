@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="{{ asset('css/confirmed.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- confirmed.blade.php -->
 <div class="wp-confirmed-page">
     <div class="wp-confirmed-card" id="rsvpSuccess">
@@ -54,17 +55,27 @@
                     <span class="wp-detail-value">Sé Catedral de Beja</span>
                     <span class="wp-detail-subvalue">Beja</span>
                 </div>
+
+                <a href="https://maps.app.goo.gl/qny38v8Q6DSSuBeb8" target="_blank" class="wp-confirmed-btn">
+                    <i class="fa-solid fa-map-location-dot"></i> Ver no mapa
+                </a>
             </div>
 
             <div class="wp-detail-item">
                 <div class="wp-detail-icon">
                     <i class="fa-solid fa-location-dot"></i>
                 </div>
+
                 <div class="wp-detail-text">
                     <span class="wp-detail-label">Local</span>
                     <span class="wp-detail-value">Quinta dos Magalhães em Beringel</span>
                     <span class="wp-detail-subvalue">Beringel</span>
                 </div>
+
+                <a href="https://maps.app.goo.gl/qny38v8Q6DSSuBeb8" target="_blank" class="wp-confirmed-btn">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    Ver no mapa
+                </a>
             </div>
 
             <div class="wp-detail-item">
@@ -83,15 +94,11 @@
             <span class="wp-detail-label">Confirmados</span>
             <p class="wp-confirmed-guest-names">
                 {{ $guest->name }}
-                @foreach($guest->companions as $companion)
+                @foreach ($guest->companions as $companion)
                     , {{ $companion->name }}
                 @endforeach
             </p>
         </div>
-
-        <a href="https://maps.app.goo.gl/qny38v8Q6DSSuBeb8" target="_blank" class="wp-confirmed-btn">
-            <i class="fa-solid fa-map-location-dot"></i> Ver no mapa
-        </a>
 
         <p class="wp-confirmed-footer">
             Alguma dúvida ou precisa alterar algo? Entre em contacto connosco.

@@ -5723,25 +5723,100 @@ function initMap() {
                 body: formData,
             });
 
-            const data = await response.json();
+            // Read raw response FIRST, before trying to parse JSON
+            const rawText = await response.text();
+            console.log("Raw response:", rawText);
+            console.log("Status:", response.status);
 
-            if (!response.ok) {
+            let data;
+            try {
+                data = JSON.parse(rawText);
+            } catch (parseError) {
                 showFormError(
-                    data.message || "Ocorreu um erro. Tente novamente.",
+                    `Erro ao processar resposta (status ${response.status}). Ver console.`,
+                );
+                console.error(
+                    "JSON parse failed. Server probably returned HTML/error page:",
+                    rawText,
                 );
                 return;
             }
 
-            /*
-        | Success — hide form, show success view
-        */
+            if (!response.ok) {
+                showFormError(
+                    data.message ||
+                        `Ocorreu um erro (status ${response.status}).`,
+                );
+                console.error("Server error data:", data);
+                return;
+            }
 
-           if (data.redirect) {
+            if (data.redirect) {
                 window.location.href = data.redirect;
                 return;
             }
         } catch (error) {
-            showFormError("Ocorreu um erro de rede. Tente novamente.");
+            showFormError(`Erro de rede: ${error.message}`);
+            console.error("Fetch failed entirely:", error);
+        }
+    });
+    
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        hideFormError();
+
+        if (!validateStep3()) {
+            flagStepError();
+            return;
+        }
+
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(form.action, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                },
+                body: formData,
+            });
+
+            // Read raw response FIRST, before trying to parse JSON
+            const rawText = await response.text();
+            console.log("Raw response:", rawText);
+            console.log("Status:", response.status);
+
+            let data;
+            try {
+                data = JSON.parse(rawText);
+            } catch (parseError) {
+                showFormError(
+                    `Erro ao processar resposta (status ${response.status}). Ver console.`,
+                );
+                console.error(
+                    "JSON parse failed. Server probably returned HTML/error page:",
+                    rawText,
+                );
+                return;
+            }
+
+            if (!response.ok) {
+                showFormError(
+                    data.message ||
+                        `Ocorreu um erro (status ${response.status}).`,
+                );
+                console.error("Server error data:", data);
+                return;
+            }
+
+            if (data.redirect) {
+                window.location.href = data.redirect;
+                return;
+            }
+        } catch (error) {
+            showFormError(`Erro de rede: ${error.message}`);
+            console.error("Fetch failed entirely:", error);
         }
     });
 

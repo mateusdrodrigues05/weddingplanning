@@ -22,6 +22,10 @@ class InviteController extends Controller
 
     public function store(Request $request, Guest $guest)
     {
+        if ($guest->rsvp_status !== 'pending') {
+            abort(403, 'Este convite já foi respondido.');
+        }
+
         $validated = $request->validate([
             'guest_has_allergy' => 'boolean',
             'guest_allergy_description' => 'nullable|string',
@@ -34,57 +38,58 @@ class InviteController extends Controller
 
         $data = $request->all();
         $companions = $data['companions'] ?? [];
-        //$companions = $data['companions'] ?? [];
-        //$allergies = $data['allergies'] ?? [];
-
-        //Update MainGuest Data
-        if($data['guest_has_allergy'] == 0){
-            $guest->update([
-                'rsvp_status' => 'confirmed',
-            ]);
-        }else{
-            $guest->update([
-                'rsvp_status' => 'confirmed',
-                'allergies' => $data['guest_allergy_description']
-            ]);
-        }
-
-
-        $guest->companions()->delete();
+        // Determine contact field based on type
+        $contactData = $data['contact_type'] === 'email'
+            ? ['email' => $data['contact_value']]
+            : ['phone' => $data['contact_value']];
+        $nameGuest = $data['guest_name'];
 
         
+        //Update MainGuest Data
+        if($data['guest_has_allergy'] == 0){
+            $guest->update(array_merge([
+                'name' => $nameGuest,
+                'rsvp_status' => 'confirmed',
+            ], $contactData));
+        }else{
+            $guest->update(array_merge([
+                'name' => $nameGuest,
+                'rsvp_status' => 'confirmed',
+                'allergies' => $data['guest_allergy_description']
+            ], $contactData));
+        }
 
-            //Update Companions Data
-            foreach($companions as $companion){
-                Companion::create([
-                    'guest_id' => $guest->id,
-                    'name' => $companion['name'],
-                    'age' => $companion['age_bracket'],
-                    'has_allergies' => $companion['has_allergy'] ?? false,
-                    'allergies' => $companion['description'] ?? null,
-                ]);
-            }
+        $guest->companions()->delete();
+        
+        //Update Companions Data
+        foreach($companions as $companion){
+            Companion::create([
+                'guest_id' => $guest->id,
+                'name' => $companion['name'],
+                'age' => $companion['age_bracket'],
+                'has_allergies' => $companion['has_allergy'] ?? false,
+                'allergies' => $companion['description'] ?? null,
+            ]);
+        }
+        
         
         
         return response()->json([
             'success' => true,
-            'redirect' => route('invite.confirmed', $guest->rsvp_token),
+            'redirect' => route('invite.show', $guest->rsvp_token),
         ]);
     }
 
     public function show(Guest $guest)
     {
-        return match ($guest->rsvp_status) {
-            'pending'   => view('invite.invite', ['guest' => $guest]),
-            'confirmed' => view('invite.confirmed', ['guest' => $guest]),
-            'declined'  => view('invite.declined', ['guest' => $guest]),
+        $response = match ($guest->rsvp_status) {
+            'pending'   => response()->view('invite.invite', ['guest' => $guest]),
+            'confirmed' => response()->view('invite.confirmed', ['guest' => $guest]),
+            'declined'  => response()->view('invite.declined', ['guest' => $guest]),
             default     => abort(404),
         };
-    }
 
-    public function confirmed(Guest $guest)
-    {
-        return view('invite.confirmed', ['guest' => $guest]);
+        return $response->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+                    ->header('Pragma', 'no-cache');
     }
-
 }

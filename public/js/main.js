@@ -5188,41 +5188,46 @@ function initMap() {
     function validateStep1() {
         let valid = true;
 
-        const name = document.getElementById("guestName").value.trim();
+        clearError("guestName");
+        clearError("contactValue");
+        hideFormError();
 
-        const contact = contactInput.value.trim();
+        const guestName = document.getElementById("guestName").value.trim();
+        const contactValue = document
+            .getElementById("contactValue")
+            .value.trim();
+        const contactType = document.getElementById("contactType").value;
 
-        /*
-        | Name
-        */
-
-        if (!name) {
-            setError("fieldName");
-
+        if (!guestName) {
+            setError("guestName");
             valid = false;
-        } else {
-            clearError("fieldName");
         }
 
-        /*
-        | Contact
-        */
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        const phoneRegex = /^\d{9}$/;
-
-        const contactOk =
-            contactType === "email"
-                ? emailRegex.test(contact)
-                : phoneRegex.test(contact);
-
-        if (!contact || !contactOk) {
-            setError("fieldContact");
-
+        if (!contactValue) {
+            
+            setError("contactValue");
             valid = false;
-        } else {
-            clearError("fieldContact");
+        } else if (contactType === "email") {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailRegex.test(contactValue)) {
+                setError("contactValue");
+                valid = false;
+            }
+        } else if (contactType === "phone") {
+            console.log(contactValue);
+            const phoneRegex = /^[9][1236]\d{7}$/;
+
+            if (!phoneRegex.test(contactValue)) {
+                setError("contactValue");
+                valid = false;
+            }
+        }
+
+        if (!valid) {
+            showFormError(
+                "Por favor, preencha corretamente todos os campos obrigatórios.",
+            );
         }
 
         return valid;
@@ -5704,7 +5709,6 @@ function initMap() {
 
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
-
         hideFormError();
 
         if (!validateStep3()) {
@@ -5717,95 +5721,22 @@ function initMap() {
         try {
             const response = await fetch(form.action, {
                 method: "POST",
-                headers: {
-                    Accept: "application/json",
-                },
+                headers: { Accept: "application/json" },
                 body: formData,
             });
 
-            // Read raw response FIRST, before trying to parse JSON
             const rawText = await response.text();
-            console.log("Raw response:", rawText);
-            console.log("Status:", response.status);
-
             let data;
             try {
                 data = JSON.parse(rawText);
             } catch (parseError) {
-                showFormError(
-                    `Erro ao processar resposta (status ${response.status}). Ver console.`,
-                );
-                console.error(
-                    "JSON parse failed. Server probably returned HTML/error page:",
-                    rawText,
-                );
+                showFormError(`Erro ao processar resposta (status ${response.status}). Ver console.`);
+                console.error("JSON parse failed:", rawText);
                 return;
             }
 
             if (!response.ok) {
-                showFormError(
-                    data.message ||
-                        `Ocorreu um erro (status ${response.status}).`,
-                );
-                console.error("Server error data:", data);
-                return;
-            }
-
-            if (data.redirect) {
-                window.location.href = data.redirect;
-                return;
-            }
-        } catch (error) {
-            showFormError(`Erro de rede: ${error.message}`);
-            console.error("Fetch failed entirely:", error);
-        }
-    });
-    
-    form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        hideFormError();
-
-        if (!validateStep3()) {
-            flagStepError();
-            return;
-        }
-
-        const formData = new FormData(form);
-
-        try {
-            const response = await fetch(form.action, {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                },
-                body: formData,
-            });
-
-            // Read raw response FIRST, before trying to parse JSON
-            const rawText = await response.text();
-            console.log("Raw response:", rawText);
-            console.log("Status:", response.status);
-
-            let data;
-            try {
-                data = JSON.parse(rawText);
-            } catch (parseError) {
-                showFormError(
-                    `Erro ao processar resposta (status ${response.status}). Ver console.`,
-                );
-                console.error(
-                    "JSON parse failed. Server probably returned HTML/error page:",
-                    rawText,
-                );
-                return;
-            }
-
-            if (!response.ok) {
-                showFormError(
-                    data.message ||
-                        `Ocorreu um erro (status ${response.status}).`,
-                );
+                showFormError(data.message || `Ocorreu um erro (status ${response.status}).`);
                 console.error("Server error data:", data);
                 return;
             }

@@ -646,19 +646,20 @@
                                 <label>Como prefere ser contactado? *</label>
 
                                 <div class="contact-toggle">
-                                    <button type="button" class="active" data-contact-type="email">
-                                        Email
+                                    <button type="button" class="active" data-contact-type="phone">
+                                        Telefone
                                     </button>
 
-                                    <button type="button" data-contact-type="phone">
-                                        Telefone
+
+                                    <button type="button" data-contact-type="email">
+                                        Email
                                     </button>
                                 </div>
 
                                 <input type="text" id="contactValue" name="contact_value"
-                                    placeholder="exemplo@email.com" value="{{ old('contact_value') }}" required>
+                                    placeholder="953244365" value="{{ old('contact_value') }}" required>
 
-                                <input type="hidden" name="contact_type" id="contactType" value="email">
+                                <input type="hidden" name="contact_type" id="contactType" value="phone">
                             </div>
                         </div>
 

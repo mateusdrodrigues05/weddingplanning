@@ -51,7 +51,7 @@
                     <i class="fa-solid fa-location-dot"></i>
                 </div>
                 <div class="wp-detail-text">
-                    <span class="wp-detail-label">Local</span>
+                    <span class="wp-detail-label">Local Cerimónia</span>
                     <span class="wp-detail-value">Sé Catedral de Beja</span>
                     <span class="wp-detail-subvalue">Beja</span>
                 </div>
@@ -67,7 +67,7 @@
                 </div>
 
                 <div class="wp-detail-text">
-                    <span class="wp-detail-label">Local</span>
+                    <span class="wp-detail-label">Local Festa</span>
                     <span class="wp-detail-value">Quinta dos Magalhães em Beringel</span>
                     <span class="wp-detail-subvalue">Beringel</span>
                 </div>
@@ -101,7 +101,8 @@
         </div>
 
         <p class="wp-confirmed-footer">
-            Alguma dúvida ou precisa alterar algo? Entre em contacto connosco.
+            Alguma dúvida ou precisa alterar algo? Entre em contacto connosco. <br>
+            Noivo - 964 847 548 | Noiva - 967 070 197
         </p>
 
     </div>

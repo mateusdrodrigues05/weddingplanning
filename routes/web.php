@@ -19,7 +19,6 @@ Route::delete('/guests/{id}', [GuestController::class, 'delete'])->name('guests.
 
 
 //Invite Routes
-Route::get('/invite/{guest}', [InviteController::class, 'index'])->name('invite.index');
+//Route::get('/invite/{guest}', [InviteController::class, 'index'])->name('invite.index');
 Route::post('/invite/{guest}', [InviteController::class, 'store'])->name('invite.store');   
-Route::get('/invite/{guest}', [InviteController::class, 'show'])->name('invite.show');
-Route::get('/invite/{guest}/confirmed', [InviteController::class, 'confirmed'])->name('invite.confirmed');
+Route::get('/invite/{guest:rsvp_token}', [InviteController::class, 'show'])->name('invite.show');

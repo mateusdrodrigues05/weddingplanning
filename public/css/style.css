@@ -24999,3 +24999,16 @@ footer .footer-navbar .nav-item:last-child a {
 
     .form-control { font-size: 14px; }
 }
+
+.wp-companions-modal .form-control {
+    font-size: 16px !important;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="number"],
+select,
+textarea {
+    font-size: 16px !important;
+}

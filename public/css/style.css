@@ -24996,4 +24996,6 @@ footer .footer-navbar .nav-item:last-child a {
     .wp-invite-text{
       padding: 15px !important;
     }
+
+    .form-control { font-size: 14px; }
 }

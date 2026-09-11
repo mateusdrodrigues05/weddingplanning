@@ -1783,3 +1783,27 @@ svg {
 body.wp-menu-open {
     overflow: hidden;
 }
+
+/*====== FIX ON MOBILE =======*/
+.wp-hamburger-btn,
+.filter-btn {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: var(--wp-text, #3a3a2c); /* replace with whatever your dark sage/ink color variable is */
+}
+
+.wp-hamburger-btn svg,
+.filter-btn svg {
+    stroke: currentColor;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="number"],
+select,
+textarea {
+    font-size: 16px !important;
+}

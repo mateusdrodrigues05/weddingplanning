@@ -18,12 +18,21 @@
         </div>
     @endif
 
-    <div class="page-header">
-        <div>
-            <div class="eyebrow">Gestão</div>
-            <h1>Convidados</h1>
+    <div class="page-header wp-page-header">
+        <div class="wp-header-left">
+            <button class="btn wp-hamburger-btn" onclick="openMobileMenu()" aria-label="Abrir menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+                    <path d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+
+            <div>
+                <div class="eyebrow">Gestão</div>
+                <h1>Convidados</h1>
+            </div>
         </div>
-        <button class="btn btn-primary" onclick="openModal()">
+
+        <button class="btn btn-primary wp-add-guest-btn" onclick="openModal()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
                 <path d="M12 5v14M5 12h14" />
             </svg>
@@ -93,28 +102,20 @@
         </button>
 
         <div class="filter-panel" id="filterPanel">
-            <div class="chips">
-                <div class="chip active" onclick="setFilter('all', this)">Todos</div>
-                <div class="chip" onclick="setFilter('confirmed', this)">Confirmados</div>
-                <div class="chip" onclick="setFilter('pending', this)">Pendentes</div>
-                <div class="chip" onclick="setFilter('declined', this)">Recusados</div>
-            </div>
-            <div class="view-toggle">
-                <button class="view-btn active" id="btn-grid" title="Vista em grelha" onclick="setView('grid', this)">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="7" height="7" rx="1.5" />
-                        <rect x="14" y="3" width="7" height="7" rx="1.5" />
-                        <rect x="3" y="14" width="7" height="7" rx="1.5" />
-                        <rect x="14" y="14" width="7" height="7" rx="1.5" />
+            <div class="filter-panel-row">
+                <button class="filter-toggle-btn" id="filterToggleBtn" onclick="toggleFilterChips()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <path d="M4 6h16M7 12h10M10 18h4" />
                     </svg>
+                    Filtros
                 </button>
-                <button class="view-btn" id="btn-list" title="Vista em lista" onclick="setView('list', this)">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round">
-                        <path d="M8 6h13M8 12h13M8 18h13" />
-                        <path d="M3 6h.01M3 12h.01M3 18h.01" />
-                    </svg>
-                </button>
+
+                <div class="chips" id="chipsRow">
+                    <div class="chip active" onclick="setFilter('all', this)">Todos</div>
+                    <div class="chip" onclick="setFilter('confirmed', this)">Confirmados</div>
+                    <div class="chip" onclick="setFilter('pending', this)">Pendentes</div>
+                    <div class="chip" onclick="setFilter('declined', this)">Recusados</div>
+                </div>
             </div>
         </div>
     </div>
@@ -171,11 +172,13 @@
                             <i class="fa-regular fa-pen-to-square"></i>
                         </a>
 
-                        <button type="button" class="icon-btn copy-invite-link" title="Copiar Link" data-link="{{ route('invite.show', $guest->rsvp_token) }}">
+                        <button type="button" class="icon-btn copy-invite-link" title="Copiar Link"
+                            data-link="{{ route('invite.show', $guest->rsvp_token) }}">
                             <i class="fa-solid fa-link"></i>
                         </button>
-                        
-                        <button class="icon-btn" title="Remover" onclick="openDeleteModal({{ $guest->id }}, '{{ $guest->name }}')">
+
+                        <button class="icon-btn" title="Remover"
+                            onclick="openDeleteModal({{ $guest->id }}, '{{ $guest->name }}')">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
 
@@ -256,6 +259,38 @@
 
 @section('scripts')
     <script>
+        function openMobileMenu() {
+            document.querySelector('.sidebar').classList.add('active');
+            document.getElementById('wpMenuOverlay').classList.add('active');
+            document.body.classList.add('wp-menu-open');
+        }
+
+        function closeMobileMenu() {
+            document.querySelector('.sidebar').classList.remove('active');
+            document.getElementById('wpMenuOverlay').classList.remove('active');
+            document.body.classList.remove('wp-menu-open');
+        }
+        
+        function toggleFilterChips() {
+            document.getElementById('chipsRow').classList.toggle('open');
+        }
+
+        // optional: close when clicking outside
+        document.addEventListener('click', function (e) {
+            const panel = document.getElementById('filterPanel');
+            const chips = document.getElementById('chipsRow');
+            if (!panel.contains(e.target)) {
+                chips.classList.remove('open');
+            }
+        });
+
+        // close dropdown after selecting a chip
+        document.querySelectorAll('#chipsRow .chip').forEach(function (chip) {
+            chip.addEventListener('click', function () {
+                document.getElementById('chipsRow').classList.remove('open');
+            });
+        });
+
         let currentFilter = 'all';
         let currentView = 'grid';
 
@@ -370,7 +405,7 @@
         });
 
         // ======= Copy Link To Invite =======
-        document.addEventListener('click', function (e) {
+        document.addEventListener('click', function(e) {
             console.log("Script included");
             const btn = e.target.closest('.copy-invite-link');
             if (!btn) return;
@@ -421,7 +456,5 @@
                 icon.classList.add('fa-link');
             }, 1500);
         }
-
-
     </script>
 @endsection

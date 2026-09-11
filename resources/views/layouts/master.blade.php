@@ -71,6 +71,9 @@
                 </svg>Definições</div> --}}
         </div>
 
+        <!-- Mobile menu overlay -->
+        <div class="wp-menu-overlay" id="wpMenuOverlay" onclick="closeMobileMenu()"></div>
+
         <!-- Conteúdo principal -->
         <div class="content">
 

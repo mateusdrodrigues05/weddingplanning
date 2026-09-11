@@ -5859,3 +5859,18 @@ function initMap() {
 
     showPanel(1);
 })();
+
+
+
+//======== HEADER SIDE BAR MOBILE =============
+function openMobileMenu() {
+    document.querySelector('.sidebar').classList.add('active');
+    document.getElementById('wpMenuOverlay').classList.add('active');
+    document.body.classList.add('wp-menu-open');
+}
+
+function closeMobileMenu() {
+    document.querySelector('.sidebar').classList.remove('active');
+    document.getElementById('wpMenuOverlay').classList.remove('active');
+    document.body.classList.remove('wp-menu-open');
+}

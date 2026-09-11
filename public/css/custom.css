@@ -1786,16 +1786,16 @@ body.wp-menu-open {
 
 /*====== FIX ON MOBILE =======*/
 .wp-hamburger-btn,
-.filter-btn {
+.filter-panel {
     -webkit-appearance: none;
     appearance: none;
     background: transparent;
     color: var(--wp-text, #3a3a2c); /* replace with whatever your dark sage/ink color variable is */
-    text-decoration: none;
+    text-decoration: none !important;
 }
 
 .wp-hamburger-btn svg,
-.filter-btn svg {
+.filter-panel svg {
     stroke: currentColor;
 }
 

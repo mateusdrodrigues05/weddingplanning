@@ -112,15 +112,16 @@
                     @endforeach
                 </ul>
             </div>
-        @else
-            <div class="section-divider">
+        @endif
+        {{-- @else --}}
+            {{-- <div class="section-divider">
                 <h2 class="section-title">Acompanhantes</h2>
 
                 <p class="empty-state hidden" data-field="acompanhantes-vazio">
                     Este convidado não tem acompanhantes registados.
                 </p>
             </div>
-        @endif
+        @endif --}}
 
     </div>
 
@@ -134,7 +135,6 @@
         </div>
 
         <!-- Modal Edit Companions-->
-
         <div class="modal-overlay">
             <div class="modal">
                 <div class="modal-header">

@@ -21,8 +21,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-    
-    
+
+
 
     <!-- Ou, se não usares Vite e tiveres o CSS diretamente em public/css -->
     {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
@@ -48,13 +48,18 @@
                     <path d="M5 10v10h14V10" />
                     <path d="M9 20v-6h6v6" />
                 </svg>Início</div> --}}
-            <div class="nav-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="9" cy="8" r="3" />
-                    <path d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6" />
-                    <circle cx="17" cy="9" r="2.5" />
-                    <path d="M23 20c0-2.6-2-4.8-4.7-5.6" />
-                </svg>Convidados</div>
+            <a href="{{ route('guests') }}" style="text-decoration: none">
+                <div class="nav-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="8" r="3" />
+                        <path d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6" />
+                        <circle cx="17" cy="9" r="2.5" />
+                        <path d="M23 20c0-2.6-2-4.8-4.7-5.6" />
+                    </svg>Convidados</div>
+            </a>
+
+
+
             {{-- <div class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 8h18M5 8v10M19 8v10M3 8l2-4h14l2 4" />
@@ -71,7 +76,28 @@
                     <path
                         d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z" />
                 </svg>Definições</div> --}}
+
+                <div style="margin-top: auto;">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+
+                <button type="submit" class="nav-link"
+                    style="width: 100%; border: none; background: none; cursor: pointer; text-align: left;">
+
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+
+                    Logout
+                </button>
+            </form>
         </div>
+        </div>
+
+        
 
         <!-- Mobile menu overlay -->
         <div class="wp-menu-overlay" id="wpMenuOverlay" onclick="closeMobileMenu()"></div>

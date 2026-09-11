@@ -40,7 +40,6 @@ svg {
 
 .app {
     display: flex;
-    width: 100vw;
     min-height: 100vh;
 }
 
@@ -49,21 +48,24 @@ svg {
     display: flex;
     flex-direction: column;
     min-width: 0;
-}
-
-.main {
-    flex: 1;
+    margin-left: 245px;
+    min-height: 100vh;
 }
 
 /* Sidebar */
 .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 236px;
+    height: 100vh;
     flex-shrink: 0;
     background: var(--sage-deep);
     color: #fff;
     padding: 28px 18px;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .brand-mark {
@@ -102,7 +104,7 @@ svg {
     border-radius: 10px;
     font-size: 13.5px;
     font-weight: 600;
-    color: rgba(255, 255, 255, .62);
+    color: white;
     margin-bottom: 3px;
     cursor: pointer;
 }
@@ -126,7 +128,7 @@ svg {
 /* Main */
 .main {
     flex: 1;
-    padding: 36px 44px;
+    padding: 30px 20px;
     min-width: 0;
     box-sizing: border-box;
 }
@@ -875,7 +877,7 @@ svg {
    Cabeçalho
 ============================ */
 .guest-card__header {
-    padding: 2rem 2.5rem;
+    padding: 1rem 0.5rem;
 }
 
 .guest-card__name {
@@ -924,7 +926,7 @@ svg {
    Corpo / info
 ============================ */
 .guest-card__body {
-    padding: 2rem 2.5rem;
+    padding: 1rem 0.5rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -1023,7 +1025,7 @@ svg {
    Rodapé / ações
 ============================ */
 .guest-card__footer {
-    padding: 1.25rem 2.5rem;
+    padding: 1rem 0.5rem;
     background-color: #FAF8F4;
     border-top: 1px solid #E8E2D6;
     display: flex;
@@ -1703,6 +1705,8 @@ svg {
     }
 }
 
+
+
 /*========= HEADER MOBILE GUEST INDEX =========*/
 .wp-page-header {
     display: flex;
@@ -1777,6 +1781,20 @@ svg {
 
     .sidebar.active {
         transform: translateX(0);
+    }
+
+    .main {
+        margin-left: 0 !important;
+    }
+
+     .content {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 720px) {
+    .main {
+        padding: 20px 16px;
     }
 }
 

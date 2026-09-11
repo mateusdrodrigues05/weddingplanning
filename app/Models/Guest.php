@@ -14,7 +14,7 @@ class Guest extends Model
         'name',
         'email',
         'phone',
-        'rsvb_token',
+        'rsvp_token',
         'rsvp_status',
         'allergies',
     ];

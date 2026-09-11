@@ -1807,3 +1807,36 @@ select,
 textarea {
     font-size: 16px !important;
 }
+
+
+
+
+/*======= Layout card mobile =======*/
+.seal {
+    display: none; /* hidden by default (desktop) */
+}
+
+@media (max-width: 768px) {
+    .wp-guests-index .status-text {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .wp-guests-index .status-icon {
+        display: inline-block;
+        font-size: 11px;
+    }
+
+    .wp-guests-index .status-text.confirmed .status-icon {
+        color: #4caf82;
+    }
+
+    .wp-guests-index .status-text.declined .status-icon {
+        color: #d9534f;
+    }
+
+    .wp-guests-index .status-text.pending .status-icon {
+        color: #c9a227;
+    }
+}

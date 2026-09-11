@@ -105,7 +105,8 @@
         <div class="filter-panel" id="filterPanel">
             <div class="filter-panel-row">
                 <button class="filter-toggle-btn" id="filterToggleBtn" onclick="toggleFilterChips()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round">
                         <path d="M4 6h16M7 12h10M10 18h4" />
                     </svg>
                     Filtros
@@ -167,7 +168,16 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <div class="status-text confirmed">{{ $guest->rsvp_status }}</div>
+                    <div class="status-text {{ $guest->rsvp_status }}">
+                        <span>{{ ucfirst($guest->rsvp_status) }}</span>
+                        @if ($guest->rsvp_status == 'confirmed')
+                            <i class="fa-solid fa-check status-icon"></i>
+                        @elseif($guest->rsvp_status == 'declined')
+                            <i class="fa-solid fa-xmark status-icon"></i>
+                        @elseif($guest->rsvp_status == 'pending')
+                            <i class="fa-solid fa-clock status-icon"></i>
+                        @endif
+                    </div>
                     <div class="card-actions">
                         <a href="{{ route('guest.show', $guest->id) }}" class="icon-btn" title="Editar">
                             <i class="fa-regular fa-pen-to-square"></i>
@@ -182,7 +192,6 @@
                             onclick="openDeleteModal({{ $guest->id }}, '{{ $guest->name }}')">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
-
                     </div>
                 </div>
             </div>
@@ -271,13 +280,13 @@
             document.getElementById('wpMenuOverlay').classList.remove('active');
             document.body.classList.remove('wp-menu-open');
         }
-        
+
         function toggleFilterChips() {
             document.getElementById('chipsRow').classList.toggle('open');
         }
 
         // optional: close when clicking outside
-        document.addEventListener('click', function (e) {
+        document.addEventListener('click', function(e) {
             const panel = document.getElementById('filterPanel');
             const chips = document.getElementById('chipsRow');
             if (!panel.contains(e.target)) {
@@ -286,8 +295,8 @@
         });
 
         // close dropdown after selecting a chip
-        document.querySelectorAll('#chipsRow .chip').forEach(function (chip) {
-            chip.addEventListener('click', function () {
+        document.querySelectorAll('#chipsRow .chip').forEach(function(chip) {
+            chip.addEventListener('click', function() {
                 document.getElementById('chipsRow').classList.remove('open');
             });
         });

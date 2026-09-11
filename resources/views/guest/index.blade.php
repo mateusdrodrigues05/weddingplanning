@@ -110,6 +110,7 @@
                         <path d="M4 6h16M7 12h10M10 18h4" />
                     </svg>
                     Filtros
+                    <span class="filter-badge" id="filterBadge" style="display:none;">1</span>
                 </button>
 
                 <div class="chips" id="chipsRow">
@@ -352,6 +353,9 @@
             document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
             el.classList.add('active');
             render();
+
+            const badge = document.getElementById('filterBadge');
+            badge.style.display = filter === 'all' ? 'none' : 'flex';
         }
 
         function setView(view, el) {

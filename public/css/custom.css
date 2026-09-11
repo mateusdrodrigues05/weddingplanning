@@ -1598,6 +1598,7 @@ svg {
 
 .filter-toggle-btn {
     display: none;
+    position: relative;
 }
 
 .chips {
@@ -1620,6 +1621,24 @@ svg {
 
     .filter-panel-row {
         position: relative;   /* anchor for the dropdown */
+    }
+
+    .filter-badge {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        background: var(--clay-color, #c17a5f);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 600;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 4px;
+        line-height: 1;
     }
 
     .chips {

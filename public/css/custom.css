@@ -1790,8 +1790,8 @@ body.wp-menu-open {
     -webkit-appearance: none;
     appearance: none;
     background: transparent;
-    border: none;
     color: var(--wp-text, #3a3a2c); /* replace with whatever your dark sage/ink color variable is */
+    text-decoration: none;
 }
 
 .wp-hamburger-btn svg,

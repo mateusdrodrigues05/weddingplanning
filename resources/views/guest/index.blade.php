@@ -270,6 +270,9 @@
 
 @section('scripts')
     <script>
+        const guestDeleteUrlTemplate = "{{ route('guests.delete', ['id' => '__ID__']) }}";
+        
+        
         function openMobileMenu() {
             document.querySelector('.sidebar').classList.add('active');
             document.getElementById('wpMenuOverlay').classList.add('active');
@@ -381,7 +384,9 @@
         }
 
         function confirmDelete() {
-            fetch(`/guests/${guestIdToDelete}`, {
+            const url = guestDeleteUrlTemplate.replace('__ID__', guestIdToDelete);
+
+            fetch(url, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -391,7 +396,7 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        location.reload(); // refreshes the page, guest list updates
+                        location.reload();
                     } else {
                         alert('Erro ao eliminar convidado.');
                     }

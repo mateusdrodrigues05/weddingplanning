@@ -1786,7 +1786,7 @@ body.wp-menu-open {
 
 /*====== FIX ON MOBILE =======*/
 .wp-hamburger-btn,
-.filter-panel {
+.filter-toggle-btn {
     -webkit-appearance: none;
     appearance: none;
     background: transparent;
@@ -1795,7 +1795,7 @@ body.wp-menu-open {
 }
 
 .wp-hamburger-btn svg,
-.filter-panel svg {
+.filter-toggle-btn svg {
     stroke: currentColor;
 }
 

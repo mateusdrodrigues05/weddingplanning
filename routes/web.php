@@ -30,9 +30,9 @@ Route::post('/invite/{guest}', [InviteController::class, 'store'])
 Route::middleware('auth')->group(function () {
 
     // Dashboard
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    // Route::get('/dashboard', function () {
+    //     return view('dashboard');
+    // })->name('dashboard');
 
 
     // Guests

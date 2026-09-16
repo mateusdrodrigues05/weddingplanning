@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function () {
         ->name('guests');
 
     Route::get('/guest/show/{id}', [GuestController::class, 'show'])
-        ->name('guest.show');
+        ->name('guest.showGuest');
 
     Route::post('/guests', [GuestController::class, 'store'])
         ->name('guests.store');

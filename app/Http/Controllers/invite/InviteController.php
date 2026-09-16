@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Guest;
 use App\Models\Companion;
+use Illuminate\Support\Facades\Log;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -74,10 +75,13 @@ class InviteController extends Controller
         
         
         
+        Log::channel('activity')->info("{$guest->name} accepted the invite");
         return response()->json([
             'success' => true,
             'redirect' => route('invite.show', $guest->rsvp_token),
         ]);
+
+        
     }
 
     public function show(Guest $guest)

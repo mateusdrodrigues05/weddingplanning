@@ -93,6 +93,7 @@ class InviteController extends Controller
             default     => abort(404),
         };
 
+        Log::channel('activity')->info("{$guest->name} - Status: {$guest->rsvp_status} - see the invite");
         return $response->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
                     ->header('Pragma', 'no-cache');
     }

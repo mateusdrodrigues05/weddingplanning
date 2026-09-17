@@ -26,7 +26,7 @@ class GuestController extends Controller
         ]);
     }
 
-    public function show(Request $request, int $id){
+    public function show(Request $request, $id){
         $guest = Guest::findOrFail($id);
 
         $companions = $guest->companions;
@@ -41,30 +41,24 @@ class GuestController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {   
         $request->validate([
             'name' => 'required|string|max:225',
             'phone' => 'required|integer',
         ]);
 
-        try {
-            Guest::create([
-                'wedding_id' => 1,
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'rsvp_token' => Str::random(32),
-                'rsvp_status' => 'pending',
-            ]);
 
-            Log::channel('activity')->info(auth()->user()->name . " added a new guest ({$request->name})");
+        Guest::create([
+            'wedding_id' => 1,
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'rsvp_token' => Str::random(32),
+            'rsvp_status' => 'pending',
+        ]);
 
-            return redirect()->back()->with('success', 'Convidado adicionado.');
-        } catch (\Throwable $e) {
-            Log::channel('activity')->error(auth()->user()->name . " failed to add guest ({$request->name}): " . $e->getMessage());
-
-            return redirect()->back()->with('error', 'Erro ao adicionar convidado.');
-        }
+        Log::channel('activity')->info(auth()->user()->name . " added a new guest ({$request->name})");
+        return redirect()->back()->with('success', 'Convidado adicionado.');
     }
 
     public function delete(int $id) : JsonResponse
@@ -75,18 +69,10 @@ class GuestController extends Controller
             return response()->json(['success' => false, 'message' => 'Convidado não encontrado'], 404);
         }
 
-        $guestName = $guest->name;
-        try {
-            $guest->delete();
+        $guest->delete();
 
-            Log::channel('activity')->info(auth()->user()->name . " deleted guest ({$guestName})");
-
-            return response()->json(['success' => true]);
-        } catch (\Throwable $e) {
-            Log::channel('activity')->error(auth()->user()->name . " failed to delete guest ({$guestName}): " . $e->getMessage());
-
-            return response()->json(['success' => false, 'message' => 'Erro ao excluir convidado'], 500);
-        }
+        Log::channel('activity')->info(auth()->user()->name . " deleted guest ({$request->name})");
+        return response()->json(['success' => true]);
     }
 
     public function getTokenGuest( int $id)

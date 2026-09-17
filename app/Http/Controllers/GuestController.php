@@ -6,7 +6,6 @@ use App\Models\Guest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 
 class GuestController extends Controller
 {
@@ -57,11 +56,10 @@ class GuestController extends Controller
             'rsvp_status' => 'pending',
         ]);
 
-        Log::channel('activity')->info(auth()->user()->name . " added a new guest ({$request->name})");
         return redirect()->back()->with('success', 'Convidado adicionado.');
     }
 
-    public function delete(int $id) : JsonResponse
+    public function delete($id) : JsonResponse
     {
         $guest = Guest::find($id);
 
@@ -71,11 +69,10 @@ class GuestController extends Controller
 
         $guest->delete();
 
-        Log::channel('activity')->info(auth()->user()->name . " deleted guest ({$request->name})");
         return response()->json(['success' => true]);
     }
 
-    public function getTokenGuest( int $id)
+    public function getTokenGuest($id)
     {
         $guest = Guest::find($id);
 

@@ -180,7 +180,7 @@
                         @endif
                     </div>
                     <div class="card-actions">
-                        <a href="{{ route('guest.showGuest', $guest->id) }}" class="icon-btn" title="Editar">
+                        <a href="{{ route('guest.show', $guest->id) }}" class="icon-btn" title="Editar">
                             <i class="fa-regular fa-pen-to-square"></i>
                         </a>
 

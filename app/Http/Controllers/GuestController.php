@@ -25,7 +25,7 @@ class GuestController extends Controller
         ]);
     }
 
-    public function show(Request $request, $id){
+    public function show(Request $request, int $id){
         $guest = Guest::findOrFail($id);
 
         $companions = $guest->companions;
@@ -59,7 +59,7 @@ class GuestController extends Controller
         return redirect()->back()->with('success', 'Convidado adicionado.');
     }
 
-    public function delete($id) : JsonResponse
+    public function delete(int $id) : JsonResponse
     {
         $guest = Guest::find($id);
 
@@ -72,7 +72,7 @@ class GuestController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function getTokenGuest($id)
+    public function getTokenGuest( int $id)
     {
         $guest = Guest::find($id);
 

@@ -6,6 +6,7 @@ use App\Http\Resources\GuestResource;
 use App\Models\Guest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class GuestController extends Controller
 {
@@ -56,7 +57,16 @@ class GuestController extends Controller
 
     public function destroy(Guest $guest)
     {
-        $guest->delete($guest);
+        Log::info('Deleting guest', [
+            'id' => $guest->id,
+            'name' => $guest->name,
+        ]);
+
+        $guest->delete();
+
+        Log::info('Guest deleted successfully', [
+            'id' => $guest->id,
+        ]);
 
         return response()->noContent();
     }

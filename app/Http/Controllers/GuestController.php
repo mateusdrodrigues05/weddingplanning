@@ -6,6 +6,7 @@ use App\Models\Guest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class GuestController extends Controller
 {
@@ -47,13 +48,19 @@ class GuestController extends Controller
         ]);
 
 
-        Guest::create([
+        $guest = Guest::create([
             'wedding_id' => 1,
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'rsvp_token' => Str::random(32),
             'rsvp_status' => 'pending',
+        ]);
+
+        Log::channel('activity')->info('Guest created', [
+            'guest_id' => $guest->id,
+            'wedding_id' => $guest->wedding_id,
+            'user_id' => auth()->id(),
         ]);
 
         return redirect()->back()->with('success', 'Convidado adicionado.');
@@ -69,12 +76,25 @@ class GuestController extends Controller
 
         $guest->delete();
 
+        Log::channel('activity')->info('Guest deleted', [
+            'guest_id' => $guest->id,
+            'wedding_id' => $guest->wedding_id,
+            'user_id' => auth()->id(),
+        ]);
+
         return response()->json(['success' => true]);
     }
 
     public function getTokenGuest( int $id)
     {
         $guest = Guest::find($id);
+
+        Log::channel('activity')->info('Copy the link for invite', [
+            'guest_id' => $guest->id,
+            'guest_name' => $guest->name,
+            'wedding_id' => $guest->wedding_id,
+            'user_id' => auth()->id(),
+        ]);
 
         dd($guest->rsvp_token);
     }

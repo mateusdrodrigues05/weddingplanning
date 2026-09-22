@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Guest;
 use App\Models\Companion;
+use Illuminate\Support\Facades\Log;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -72,7 +73,12 @@ class InviteController extends Controller
             ]);
         }
         
-        
+        Log::channel('activity')->info('Guest confirmed invite', [
+            'guest_id' => $guest->id,
+            'guest_name' => $guest->name,
+            'wedding_id' => $guest->wedding_id,
+            'companions' => count($companions),
+        ]);
         
         return response()->json([
             'success' => true,
@@ -88,6 +94,12 @@ class InviteController extends Controller
             'declined'  => response()->view('invite.declined', ['guest' => $guest]),
             default     => abort(404),
         };
+
+        Log::channel('activity')->info('Guest see the invite', [
+            'guest_id' => $guest->id,
+            'wedding_id' => $guest->wedding_id,
+            'status' => $guest->rsvp_status,
+        ]);
 
         return $response->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
                     ->header('Pragma', 'no-cache');

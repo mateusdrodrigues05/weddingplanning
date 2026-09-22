@@ -17,7 +17,6 @@ class LogsController extends Controller
         foreach ($files as $file) {
             $filename = $file->getFilename();
 
-            // skip non-log files like .gitignore
             if (!str_ends_with($filename, '.log')) {
                 continue;
             }
@@ -25,7 +24,16 @@ class LogsController extends Controller
             $content = file_get_contents($file->getPathname());
             $entries = $this->parseLogEntries($content);
 
-            $result[$filename] = array_reverse($entries);
+            $result[] = [
+                'nameFile' => $filename,
+                'date' => date('Y-m-d H:i:s', $file->getMTime()),
+                'environment' => config('app.env'),
+                'entries' => array_map(fn($e) => [
+                    'time' => $e['time'],
+                    'level' => $e['level'],
+                    'message' => $e['message'],
+                ], array_reverse($entries)),
+            ];
         }
 
         return response()->json(['files' => $result]);

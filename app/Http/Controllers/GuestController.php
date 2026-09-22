@@ -41,29 +41,41 @@ class GuestController extends Controller
     }
 
     public function store(Request $request)
-    {   
+    {
         $request->validate([
             'name' => 'required|string|max:225',
             'phone' => 'required|integer',
         ]);
 
+        try {
+            $guest = Guest::create([
+                'wedding_id' => 1,
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'rsvp_token' => Str::random(32),
+                'rsvp_status' => 'pending',
+            ]);
 
-        $guest = Guest::create([
-            'wedding_id' => 1,
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'rsvp_token' => Str::random(32),
-            'rsvp_status' => 'pending',
-        ]);
+            Log::channel('activity')->info('Guest created', [
+                'guest_id' => $guest->id,
+                'guest_name' => $guest->name,
+                'wedding_id' => $guest->wedding_id,
+                'user_id' => auth()->id(),
+                'user_name' => auth()->user()?->name,
+            ]);
 
-        Log::channel('activity')->info('Guest created', [
-            'guest_id' => $guest->id,
-            'wedding_id' => $guest->wedding_id,
-            'user_id' => auth()->id(),
-        ]);
+            return redirect()->back()->with('success', 'Convidado adicionado.');
 
-        return redirect()->back()->with('success', 'Convidado adicionado.');
+        } catch (\Throwable $e) {
+            Log::channel('activity')->error('Failed to create guest', [
+                'error' => $e->getMessage(),
+                'user_id' => auth()->id(),
+                'user_name' => auth()->user()?->name,
+            ]);
+
+            return redirect()->back()->with('error', 'Ocorreu um erro ao adicionar o convidado. Tente novamente.');
+        }
     }
 
     public function delete(int $id) : JsonResponse
@@ -74,15 +86,26 @@ class GuestController extends Controller
             return response()->json(['success' => false, 'message' => 'Convidado não encontrado'], 404);
         }
 
-        $guest->delete();
 
-        Log::channel('activity')->info('Guest deleted', [
-            'guest_id' => $guest->id,
-            'wedding_id' => $guest->wedding_id,
-            'user_id' => auth()->id(),
-        ]);
+        try{
+            $guest->delete();
 
-        return response()->json(['success' => true]);
+            Log::channel('activity')->info('Guest deleted', [
+                'guest_id' => $guest->id,
+                'wedding_id' => $guest->wedding_id,
+                'user_id' => auth()->id(),
+                'user_name' => auth()->user()?->name,
+            ]);
+
+            return response()->json(['success' => true]);
+        }catch(\Throwable $e){
+
+            Log::channel('activity')->error('Failed to delete guest', [
+                'error' => $e->getMessage(),
+                'user_id' => auth()->id(),
+                'user_name' => auth()->user()?->name,
+            ]);
+        }
     }
 
     public function getTokenGuest( int $id)
@@ -94,6 +117,7 @@ class GuestController extends Controller
             'guest_name' => $guest->name,
             'wedding_id' => $guest->wedding_id,
             'user_id' => auth()->id(),
+            'user_name' => auth()->user()?->name,
         ]);
 
         dd($guest->rsvp_token);

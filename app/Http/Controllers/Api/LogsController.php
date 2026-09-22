@@ -3,21 +3,32 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class LogsController extends Controller
 {
     public function index()
     {
-        $path = storage_path("logs/activity.log");
+        $logPath = storage_path('logs');
+        $files = File::files($logPath);
 
-        if (!file_exists($path)) {
-            return response()->json(['entries' => []]);
+        $result = [];
+
+        foreach ($files as $file) {
+            $filename = $file->getFilename();
+
+            // skip non-log files like .gitignore
+            if (!str_ends_with($filename, '.log')) {
+                continue;
+            }
+
+            $content = file_get_contents($file->getPathname());
+            $entries = $this->parseLogEntries($content);
+
+            $result[$filename] = array_reverse($entries);
         }
 
-        $content = file_get_contents($path);
-        $entries = $this->parseLogEntries($content);
-
-        return response()->json(['entries' => array_reverse($entries)]);
+        return response()->json(['files' => $result]);
     }
 
     private function parseLogEntries(string $content): array

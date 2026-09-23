@@ -5874,3 +5874,12 @@ function closeMobileMenu() {
     document.getElementById('wpMenuOverlay').classList.remove('active');
     document.body.classList.remove('wp-menu-open');
 }
+
+
+//=========toast==========
+setTimeout(() => {
+    const toast = document.getElementById('toast-message');
+    if (toast) toast.remove();
+}, 200);
+
+

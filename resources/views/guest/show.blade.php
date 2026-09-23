@@ -13,7 +13,7 @@
     <!-- Cabeçalho -->
     <div class="guest-card__header">
         <!-- Breadcrumb / voltar -->
-        <a href="javascript:history.back()" class="back-link">&larr; Voltar aos convidados</a>
+        <a href="{{ route('guests') }}" class="back-link">&larr; Voltar aos convidados</a>
 
         <h1 class="guest-card__name" data-field="nome">{{ $guest->name }}</h1>
         <span class="badge badge--{{ $guest->rsvp_status }}" data-field="rsvp-badge">{{ $guest->rsvp_status }}</span>
@@ -134,6 +134,18 @@
                 onclick="openDeleteModal({{ $guest->id }}, '{{ $guest->name }}')">Remover</button>
         </div>
 
+        @if (session('success'))
+            <div class="toast toast-success" id="toast-message">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="toast toast-error" id="toast-message">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <!-- Modal Edit Companions-->
         <div class="modal-overlay">
             <div class="modal">
@@ -144,6 +156,8 @@
                     </div>
                     <button type="button" class="close-btn" aria-label="Fechar">&times;</button>
                 </div>
+
+                
 
                 <div class="modal-body">
                     @if ($companionsCount > 0)
@@ -156,8 +170,13 @@
                                         <div class="companion-name">{{ $companion->name }}</div>
                                         <div class="companion-age">{{ $companion->age }}</div>
                                     </div>
-                                    <button type="button" class="remove-btn" data-id="1"
-                                        aria-label="Remover Ana Silva">&times;</button>
+                                    <form action="{{ route('companion.delete', $companion->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="remove-btn" data-id="{{ $companion->id }}" aria-label="Remover {{ $companion->name }}">
+                                            &times;
+                                        </button>
+                                    </form>
                                 </div>
                             @endforeach
                         </div>
@@ -169,21 +188,37 @@
                         <span class="plus-icon">+</span>
                         Adicionar acompanhante
                     </button>
-
+                    
                     <div class="add-form-wrapper">
                         <div class="add-form">
-                            <div class="field field-name">
-                                <label>Nome</label>
-                                <input type="text" class="new-companion-name" placeholder="Nome do acompanhante">
-                            </div>
-                            <div class="field field-age">
-                                <label>Idade</label>
-                                <input type="number" class="new-companion-age" placeholder="0" min="0"
-                                    max="120">
-                            </div>
-                            <button type="button" class="add-btn" aria-label="Adicionar acompanhante">+</button>
-                        </div>
-                        <p class="form-error">Preencha o nome e a idade corretamente.</p>
+                            <form action="{{ route('companion.store', $guest->id) }}" method="POST" style="width: 100%;">
+                                @csrf
+
+                                <div class="field field-name">
+                                    <label>Nome</label>
+                                    <input type="text" name="name" class="new-companion-name" placeholder="Nome do acompanhante" value="{{ old('name') }}">
+                                    @error('name')
+                                        <span class="error">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="field field-age">
+                                    <label>Idade</label>
+                                    <input type="hidden" name="age" id="companion-age" value="{{ old('age') }}">
+
+                                    <div class="age-presets">
+                                        <button type="button" class="age-preset-btn" data-age="under3">&lt;3</button>
+                                        <button type="button" class="age-preset-btn" data-age="under12">&lt;12</button>
+                                        <button type="button" class="age-preset-btn" data-age="over12">&gt;12</button>
+                                    </div>
+
+                                    @error('age')
+                                        <span class="error">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <button type="submit" class="add-btn" aria-label="Adicionar acompanhante">+</button>
+                            </form>
                     </div>
                 </div>
 
@@ -228,92 +263,72 @@
             }
         }
 
-        //modal edit companions
+        // modal edit companions
+        const modal = document.querySelector('.wp-companions-modal');
 
-        function companionsModalEl() {
-            return document.querySelector('.wp-companions-modal');
-        }
+        const el = (selector) => modal.querySelector(selector);
 
-        function openCompanionsModal() {
-            companionsModalEl().querySelector('.modal-overlay').classList.add('active');
+        const openModal = () => {
+            el('.modal-overlay').classList.add('active');
             renderCompanions();
             hideAddForm();
-        }
+        };
 
-        function closeCompanionsModal() {
-            companionsModalEl().querySelector('.modal-overlay').classList.remove('active');
-        }
+        const closeModal = () => el('.modal-overlay').classList.remove('active');
 
-        function showAddForm() {
-            const root = companionsModalEl();
-            root.querySelector('.add-form-wrapper').classList.add('active');
-            root.querySelector('.add-companion-btn').style.display = 'none';
-            root.querySelector('.new-companion-name').focus();
-        }
+        const showAddForm = () => {
+            el('.add-form-wrapper').classList.add('active');
+            el('.add-companion-btn').style.display = 'none';
+            // el('.new-companion-name').focus();
+        };
 
-        function hideAddForm() {
-            const root = companionsModalEl();
-            root.querySelector('.add-form-wrapper').classList.remove('active');
-            root.querySelector('.add-companion-btn').style.display = 'flex';
-            root.querySelector('.new-companion-name').value = '';
-            root.querySelector('.new-companion-age').value = '';
-            root.querySelector('.form-error').classList.remove('active');
-        }
+        const hideAddForm = () => {
+            el('.add-form-wrapper').classList.remove('active');
+            el('.add-companion-btn').style.display = 'flex';
+            el('.new-companion-name').value = '';
+            el('.new-companion-age').value = '';
+            el('.form-error').classList.remove('active');
+        };
 
-        function addCompanion() {
-            const root = companionsModalEl();
-            const nameInput = root.querySelector('.new-companion-name');
-            const ageInput = root.querySelector('.new-companion-age');
-            const error = root.querySelector('.form-error');
-
-            const name = nameInput.value.trim();
-            const age = parseInt(ageInput.value, 10);
+        const addCompanion = () => {
+            const name = el('.new-companion-name').value.trim();
+            const age = parseInt(el('.new-companion-age').value, 10);
 
             if (!name || isNaN(age) || age < 0) {
-                error.classList.add('active');
+                e.preventDefault(); // stop the form from submitting
+                el('.form-error').classList.add('active');
                 return;
             }
+        };
 
-            error.classList.remove('active');
-            companions.push({
-                id: nextTempId--,
-                name,
-                age
-            });
-            renderCompanions();
-            hideAddForm();
-        }
-
-        function removeCompanion(id) {
-            companions = companions.filter(c => c.id !== id);
-            renderCompanions();
-        }
-
-        function saveCompanions() {
+        const saveCompanions = () => {
             console.log('Companions to save:', companions);
-            closeCompanionsModal();
-        }
+            closeModal();
+        };
 
         document.addEventListener('DOMContentLoaded', () => {
-            const root = companionsModalEl();
-            if (!root) return;
+            if (!modal) return;
 
-            root.querySelector('.open-trigger')?.addEventListener('click', openCompanionsModal);
-            root.querySelector('.close-btn').addEventListener('click', closeCompanionsModal);
-            root.querySelector('.btn-secondary').addEventListener('click', closeCompanionsModal);
-            root.querySelector('.btn-primary').addEventListener('click', saveCompanions);
-            root.querySelector('.add-companion-btn').addEventListener('click', showAddForm);
-            root.querySelector('.add-btn').addEventListener('click', addCompanion);
+            modal.querySelector('.open-trigger')?.addEventListener('click', openModal);
+            modal.querySelector('.close-btn').addEventListener('click', closeModal);
+            modal.querySelector('.btn-secondary').addEventListener('click', closeModal);
+            modal.querySelector('.btn-primary').addEventListener('click', saveCompanions);
+            modal.querySelector('.add-companion-btn').addEventListener('click', showAddForm);
+            modal.querySelector('.add-btn').addEventListener('click', addCompanion);
 
-            root.querySelector('.new-companion-age').addEventListener('keydown', e => {
+            modal.querySelector('.new-companion-age').addEventListener('keydown', e => {
                 if (e.key === 'Enter') addCompanion();
             });
 
             document.addEventListener('keydown', e => {
-                if (e.key === 'Escape') closeCompanionsModal();
+                if (e.key === 'Escape') closeModal();
             });
         });
 
+
+
+
+        
         //Modal delete guest
         let guestIdToDelete = null;
 
@@ -344,6 +359,18 @@
                     }
                 });
         }
+
+        //=========Age Range Modal Create Companion on Guest Edit=========
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.age-preset-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.getElementById('companion-age').value = btn.dataset.age;
+
+                    document.querySelectorAll('.age-preset-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+            });
+        });
     </script>
 
 

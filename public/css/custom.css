@@ -1304,6 +1304,7 @@ svg {
     display: flex;
     gap: 8px;
     align-items: flex-end;
+    justify-content: center;
 }
 
 .wp-companions-modal .field {
@@ -1344,7 +1345,7 @@ svg {
 }
 
 .wp-companions-modal .field-age {
-    width: 72px;
+    width: 100%;
 }
 
 .wp-companions-modal .add-btn {
@@ -1353,7 +1354,7 @@ svg {
     color: #fff;
     border: none !important;
     border-radius: 8px !important;
-    width: 38px !important;
+    width: 100% !important;
     height: 38px !important;
     min-width: 38px;
     min-height: 38px;
@@ -1877,3 +1878,81 @@ textarea {
         color: #c9a227;
     }
 }
+
+
+
+
+/*Toast success*/
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: toast-in 0.2s ease-out, toast-out 0.2s ease-in 3.6s forwards;
+    max-width: 320px;
+}
+
+.toast-success {
+    background-color: #22c55e;
+    color: #ffffff;
+    border-left: 4px solid #16a34a;
+}
+
+.toast-error {
+    background-color: #ef4444;
+    color: #ffffff;
+    border-left: 4px solid #dc2626;
+}
+
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes toast-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+
+/*=====Modal Create Companion on Guest Edit*/
+.age-presets {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+
+.age-preset-btn {
+    flex: 1;
+    padding: 12px 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.age-preset-btn.active {
+    background: #b8794f;
+    border-color: #b8794f;
+    color: #fff;
+}
+
+
